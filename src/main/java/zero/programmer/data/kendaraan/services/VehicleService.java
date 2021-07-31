@@ -1,9 +1,9 @@
 package zero.programmer.data.kendaraan.services;
 
-import zero.programmer.data.kendaraan.entities.Vehicle;
+import zero.programmer.data.kendaraan.models.VehicleData;
 
 public interface VehicleService {
     
-    public Vehicle create(Vehicle vehicle);
+    public VehicleData create(VehicleData vehicleData);
 
 }
