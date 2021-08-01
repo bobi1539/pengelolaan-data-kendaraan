@@ -1,5 +1,6 @@
 package zero.programmer.data.kendaraan.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -38,6 +39,11 @@ public class VehicleServiceImpl implements VehicleService{
         }
         VehicleData vehicleData = modelMapper.map(vehicle.get(), VehicleData.class);
         return vehicleData;
+    }
+
+    @Override
+    public List<Vehicle> listVehicle() {
+        return vehicleRepository.findAll();
     }
     
 }
