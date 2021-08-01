@@ -43,15 +43,15 @@ public class Vehicle implements Serializable{
     @Column(name = "condition_vehicle")
     private String condition;
 
-    @Column(name = "borrow_status")
-    private String borrowStatus;
+    @Column(name = "is_borrow")
+    private Boolean isBorrow;
 
     public Vehicle() {
     }
 
     public Vehicle(String registrationNumber, String name, String merk, String chassisNumber, String machineNumber,
             String policeNumber, Date purchaseDate, Long acquisitionValue, String location, String condition,
-            String borrowStatus) {
+            Boolean isBorrow) {
         this.registrationNumber = registrationNumber;
         this.name = name;
         this.merk = merk;
@@ -62,7 +62,7 @@ public class Vehicle implements Serializable{
         this.acquisitionValue = acquisitionValue;
         this.location = location;
         this.condition = condition;
-        this.borrowStatus = borrowStatus;
+        this.isBorrow = isBorrow;
     }
 
     public String getRegistrationNumber() {
@@ -145,12 +145,12 @@ public class Vehicle implements Serializable{
         this.condition = condition;
     }
 
-    public String getBorrowStatus() {
-        return borrowStatus;
+    public Boolean getIsBorrow() {
+        return isBorrow;
     }
 
-    public void setBorrowStatus(String borrowStatus) {
-        this.borrowStatus = borrowStatus;
+    public void setIsBorrow(Boolean isBorrow) {
+        this.isBorrow = isBorrow;
     }
 
     

@@ -31,7 +31,7 @@ public class VehicleData {
     @NotEmpty(message = "Kondisi kendaraan tidak boleh kosong")
     private String condition;
     
-    private String borrowStatus;
+    private Boolean isBorrow;
 
     public String getRegistrationNumber() {
         return registrationNumber;
@@ -113,12 +113,12 @@ public class VehicleData {
         this.condition = condition;
     }
 
-    public String getBorrowStatus() {
-        return borrowStatus;
+    public Boolean getIsBorrow() {
+        return isBorrow;
     }
 
-    public void setBorrowStatus(String borrowStatus) {
-        this.borrowStatus = borrowStatus;
+    public void setIsBorrow(Boolean isBorrow) {
+        this.isBorrow = isBorrow;
     }
 
     
