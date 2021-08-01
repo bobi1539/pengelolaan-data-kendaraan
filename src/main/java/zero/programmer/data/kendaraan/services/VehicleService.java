@@ -13,4 +13,6 @@ public interface VehicleService {
 
     public List<Vehicle> listVehicle();
 
+    public String remove(String registrationNumber);
+
 }

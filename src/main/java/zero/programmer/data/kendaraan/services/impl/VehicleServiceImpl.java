@@ -45,5 +45,15 @@ public class VehicleServiceImpl implements VehicleService{
     public List<Vehicle> listVehicle() {
         return vehicleRepository.findAll();
     }
+
+    @Override
+    public String remove(String registrationNumber) {
+        Optional<Vehicle> vehicle = vehicleRepository.findById(registrationNumber);
+        if (!vehicle.isPresent()){
+            return null;
+        }
+        vehicleRepository.deleteById(registrationNumber);
+        return "Data berhasil dihapus";
+    }
     
 }
