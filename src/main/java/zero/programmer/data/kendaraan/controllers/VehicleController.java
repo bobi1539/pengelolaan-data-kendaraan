@@ -1,5 +1,7 @@
 package zero.programmer.data.kendaraan.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,27 +15,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import zero.programmer.data.kendaraan.entities.Vehicle;
 import zero.programmer.data.kendaraan.models.ResponseData;
+import zero.programmer.data.kendaraan.models.ResponseListVehicle;
 import zero.programmer.data.kendaraan.models.VehicleData;
 import zero.programmer.data.kendaraan.services.VehicleService;
 
 @RestController
-@RequestMapping("/api/vehicle")
 public class VehicleController {
 
     @Autowired
     private VehicleService vehicleService;
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/api/vehicle", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<VehicleData>> create(@Valid @RequestBody VehicleData vehicleData,
             Errors errors) {
         return createOrUpdate(vehicleData, errors, "Data berhasil ditambahkan");
     }
 
-    @GetMapping("/{registrationNumber}")
+    @GetMapping(path = "/api/vehicle/{registrationNumber}")
     public ResponseEntity<ResponseData<VehicleData>> getVehicle(
             @PathVariable("registrationNumber") String registrationNumber) {
 
@@ -54,13 +56,35 @@ public class VehicleController {
         return ResponseEntity.ok().body(responseData);
     }
 
-    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/api/vehicle", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<VehicleData>> update(@Valid @RequestBody VehicleData vehicleData,
             Errors errors) {
         return createOrUpdate(vehicleData, errors, "Data berhasil diubah");
     }
 
-    private ResponseEntity<ResponseData<VehicleData>> createOrUpdate(VehicleData vehicleData, Errors errors, String messages) {
+    @GetMapping(path = "/api/vehicle")
+    public ResponseListVehicle<Vehicle> listVehicle(){
+        ResponseListVehicle<Vehicle> responseListVehicle = new ResponseListVehicle<>();
+
+        List<Vehicle> vehicles = vehicleService.listVehicle();
+        if (vehicles.isEmpty()){
+            responseListVehicle.setCode(200);
+            responseListVehicle.setStatus("OK");
+            responseListVehicle.getMessages().add("Data tidak ditemukan");
+            responseListVehicle.setData(null);
+            return responseListVehicle;
+        }
+        
+        responseListVehicle.setCode(200);
+        responseListVehicle.setStatus("OK");
+        responseListVehicle.setMessages(null);
+        responseListVehicle.setData(vehicles);
+        return responseListVehicle;
+
+    }
+
+    private ResponseEntity<ResponseData<VehicleData>> createOrUpdate(VehicleData vehicleData, Errors errors,
+            String messages) {
         ResponseData<VehicleData> responseData = new ResponseData<>();
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
