@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,23 +64,43 @@ public class VehicleController {
     }
 
     @GetMapping(path = "/api/vehicle")
-    public ResponseListVehicle<Vehicle> listVehicle(){
+    public ResponseListVehicle<Vehicle> listVehicle() {
         ResponseListVehicle<Vehicle> responseListVehicle = new ResponseListVehicle<>();
 
         List<Vehicle> vehicles = vehicleService.listVehicle();
-        if (vehicles.isEmpty()){
+        if (vehicles.isEmpty()) {
             responseListVehicle.setCode(200);
             responseListVehicle.setStatus("OK");
             responseListVehicle.getMessages().add("Data tidak ditemukan");
             responseListVehicle.setData(null);
             return responseListVehicle;
         }
-        
+
         responseListVehicle.setCode(200);
         responseListVehicle.setStatus("OK");
         responseListVehicle.setMessages(null);
         responseListVehicle.setData(vehicles);
         return responseListVehicle;
+
+    }
+
+    @DeleteMapping(path = "/api/vehicle/{registrationNumber}")
+    public ResponseEntity<ResponseData<String>> delete(
+            @PathVariable("registrationNumber") String registrationNumber) {
+        ResponseData<String> responseData = new ResponseData<>();
+        String removeVehicleById = vehicleService.remove(registrationNumber);
+        if (removeVehicleById == null) {
+            responseData.setCode(404);
+            responseData.setStatus("NOT FOUND");
+            responseData.getMessages().add("Data gagal dihapus");
+            responseData.setData(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+        }
+        responseData.setCode(200);
+        responseData.setStatus("OK");
+        responseData.getMessages().add(removeVehicleById);
+        responseData.setData(null);
+        return ResponseEntity.ok().body(responseData);
 
     }
 
