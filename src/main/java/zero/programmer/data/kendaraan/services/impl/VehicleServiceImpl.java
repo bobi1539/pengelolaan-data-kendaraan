@@ -1,5 +1,7 @@
 package zero.programmer.data.kendaraan.services.impl;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -25,6 +27,16 @@ public class VehicleServiceImpl implements VehicleService{
     public VehicleData create(VehicleData vehicleData) {
         Vehicle vehicle = modelMapper.map(vehicleData, Vehicle.class);
         vehicleRepository.save(vehicle);
+        return vehicleData;
+    }
+
+    @Override
+    public VehicleData getVehicle(String registrationNumber) {
+        Optional<Vehicle> vehicle = vehicleRepository.findById(registrationNumber);
+        if (!vehicle.isPresent()){
+            return null;
+        }
+        VehicleData vehicleData = modelMapper.map(vehicle.get(), VehicleData.class);
         return vehicleData;
     }
     

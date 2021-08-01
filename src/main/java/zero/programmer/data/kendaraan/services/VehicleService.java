@@ -6,4 +6,6 @@ public interface VehicleService {
     
     public VehicleData create(VehicleData vehicleData);
 
+    public VehicleData getVehicle(String registrationNumber);
+
 }
