@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +45,26 @@ public class VehicleController {
         responseData.setStatus("OK");
         responseData.getMessages().add("Data berhasil ditambahkan");
         responseData.setData(vehicleService.create(vehicleData));
+        return ResponseEntity.ok().body(responseData);
+    }
+
+    @GetMapping("/{registrationNumber}")
+    public ResponseEntity<ResponseData<VehicleData>> getVehicle(@PathVariable("registrationNumber") String registrationNumber){
+
+        ResponseData<VehicleData> responseData = new ResponseData<>();
+
+        VehicleData vehicleData = vehicleService.getVehicle(registrationNumber);
+        if (vehicleData == null){
+            responseData.setCode(404);
+            responseData.setStatus("NOT FOUND");
+            responseData.getMessages().add("Data tidak ditemukan");
+            responseData.setData(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+        }
+        responseData.setCode(200);
+        responseData.setStatus("OK");
+        responseData.setMessages(null);
+        responseData.setData(vehicleData);
         return ResponseEntity.ok().body(responseData);
     }
 
