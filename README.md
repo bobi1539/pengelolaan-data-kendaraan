@@ -62,9 +62,7 @@ Response :
 {
     "code": "integer",
     "status": "string",
-    "messages": [
-        "string"
-    ],
+    "messages": null,
     "data": {
         "registrationNumber" : "string",
         "name" : "string",
@@ -143,9 +141,7 @@ Response :
 {
     "code": "integer",
     "status": "string",
-    "messages": [
-        "string"
-    ],
+    "messages": null,
     "data": [
         {
             "registrationNumber" : "string",
