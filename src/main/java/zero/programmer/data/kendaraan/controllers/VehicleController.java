@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import zero.programmer.data.kendaraan.entities.Vehicle;
@@ -25,18 +26,19 @@ import zero.programmer.data.kendaraan.models.VehicleData;
 import zero.programmer.data.kendaraan.services.VehicleService;
 
 @RestController
+@RequestMapping("/api/vehicles")
 public class VehicleController {
 
     @Autowired
     private VehicleService vehicleService;
 
-    @PostMapping(path = "/api/vehicle", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<VehicleData>> create(@Valid @RequestBody VehicleData vehicleData,
             Errors errors) {
         return createOrUpdate(vehicleData, errors, "Data berhasil ditambahkan");
     }
 
-    @GetMapping(path = "/api/vehicle/{registrationNumber}")
+    @GetMapping("/{registrationNumber}")
     public ResponseEntity<ResponseData<VehicleData>> getVehicle(
             @PathVariable("registrationNumber") String registrationNumber) {
 
@@ -57,13 +59,13 @@ public class VehicleController {
         return ResponseEntity.ok().body(responseData);
     }
 
-    @PutMapping(path = "/api/vehicle", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<VehicleData>> update(@Valid @RequestBody VehicleData vehicleData,
             Errors errors) {
         return createOrUpdate(vehicleData, errors, "Data berhasil diubah");
     }
 
-    @GetMapping(path = "/api/vehicle")
+    @GetMapping()
     public ResponseListVehicle<Vehicle> listVehicle() {
         ResponseListVehicle<Vehicle> responseListVehicle = new ResponseListVehicle<>();
 
@@ -84,7 +86,7 @@ public class VehicleController {
 
     }
 
-    @DeleteMapping(path = "/api/vehicle/{registrationNumber}")
+    @DeleteMapping("/{registrationNumber}")
     public ResponseEntity<ResponseData<String>> delete(
             @PathVariable("registrationNumber") String registrationNumber) {
         ResponseData<String> responseData = new ResponseData<>();
