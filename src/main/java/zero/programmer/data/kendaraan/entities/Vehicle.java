@@ -22,13 +22,13 @@ public class Vehicle implements Serializable{
     @Column(nullable = false)
     private String merk;
 
-    @Column(name = "chassis_number", unique = true)
+    @Column(name = "chassis_number", nullable = true)
     private String chassisNumber;
 
-    @Column(name = "manchine_number", unique = true)
+    @Column(name = "manchine_number", nullable = true)
     private String machineNumber;
 
-    @Column(name = "police_number", unique = true)
+    @Column(name = "police_number", nullable = true)
     private String policeNumber;
 
     @Column(name = "purchase_date")
