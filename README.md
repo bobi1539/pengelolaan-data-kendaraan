@@ -1,5 +1,13 @@
 # API Specification
 
+## Authentication
+
+All api must use this authentication
+
+Request :
+- Header :
+    X-Api-Key : "your secret api key"
+
 ## Create Vehicle
 
 Request : 
