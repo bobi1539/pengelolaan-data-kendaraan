@@ -32,12 +32,25 @@ public class VehicleController {
     @Autowired
     private VehicleService vehicleService;
 
+    /**
+     * Insert data vehicle
+     * 
+     * @param vehicleData
+     * @param errors
+     * @return
+     */
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<VehicleData>> create(@Valid @RequestBody VehicleData vehicleData,
             Errors errors) {
         return createOrUpdate(vehicleData, errors, "Data berhasil ditambahkan");
     }
 
+    /**
+     * Melihat detail kendaraan
+     * 
+     * @param registrationNumber
+     * @return
+     */
     @GetMapping("/{registrationNumber}")
     public ResponseEntity<ResponseData<VehicleData>> getVehicle(
             @PathVariable("registrationNumber") String registrationNumber) {
@@ -59,12 +72,24 @@ public class VehicleController {
         return ResponseEntity.ok().body(responseData);
     }
 
+    /**
+     * Update data kendaraan dengan method PUT
+     * 
+     * @param vehicleData
+     * @param errors
+     * @return
+     */
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<VehicleData>> update(@Valid @RequestBody VehicleData vehicleData,
             Errors errors) {
         return createOrUpdate(vehicleData, errors, "Data berhasil diubah");
     }
 
+    /**
+     * get list data kendaraan
+     * 
+     * @return
+     */
     @GetMapping()
     public ResponseListVehicle<Vehicle> listVehicle() {
         ResponseListVehicle<Vehicle> responseListVehicle = new ResponseListVehicle<>();
@@ -86,9 +111,14 @@ public class VehicleController {
 
     }
 
+    /**
+     * menghapus data kendaraan
+     * 
+     * @param registrationNumber
+     * @return
+     */
     @DeleteMapping("/{registrationNumber}")
-    public ResponseEntity<ResponseData<String>> delete(
-            @PathVariable("registrationNumber") String registrationNumber) {
+    public ResponseEntity<ResponseData<String>> delete(@PathVariable("registrationNumber") String registrationNumber) {
         ResponseData<String> responseData = new ResponseData<>();
         String removeVehicleById = vehicleService.remove(registrationNumber);
         if (removeVehicleById == null) {
@@ -106,6 +136,14 @@ public class VehicleController {
 
     }
 
+    /**
+     * function untuk create or update
+     * 
+     * @param vehicleData
+     * @param errors
+     * @param messages
+     * @return
+     */
     private ResponseEntity<ResponseData<VehicleData>> createOrUpdate(VehicleData vehicleData, Errors errors,
             String messages) {
         ResponseData<VehicleData> responseData = new ResponseData<>();
