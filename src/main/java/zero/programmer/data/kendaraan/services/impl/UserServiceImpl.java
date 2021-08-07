@@ -4,12 +4,11 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import zero.programmer.data.kendaraan.entities.User;
-import zero.programmer.data.kendaraan.models.UserData;
 import zero.programmer.data.kendaraan.repositories.UserRepository;
 import zero.programmer.data.kendaraan.services.UserService;
 
@@ -22,18 +21,22 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public UserData createUser(UserData userData) {
-        User user = modelMapper.map(userData, User.class);
-        userRepository.save(user);
-        return userData;
+    public User createUser(User user) {
+        boolean userExists = userRepository.findById(user.getUsername()).isPresent();
+        if (userExists){
+            return null;
+        }
+        
+        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        return userRepository.save(user);
     }
 
     @Override
-    public UserData getUser(String username) {
-        // TODO Auto-generated method stub
+    public User getUser(String username) {
         return null;
     }
 
