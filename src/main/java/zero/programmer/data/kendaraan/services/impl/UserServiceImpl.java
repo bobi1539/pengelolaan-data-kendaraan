@@ -1,6 +1,7 @@
 package zero.programmer.data.kendaraan.services.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -12,10 +13,9 @@ import zero.programmer.data.kendaraan.entities.User;
 import zero.programmer.data.kendaraan.repositories.UserRepository;
 import zero.programmer.data.kendaraan.services.UserService;
 
-
 @Service
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -26,10 +26,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public User createUser(User user) {
         boolean userExists = userRepository.findById(user.getUsername()).isPresent();
-        if (userExists){
+        if (userExists) {
             return null;
         }
-        
+
         String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return userRepository.save(user);
@@ -37,7 +37,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUser(String username) {
-        return null;
+        Optional<User> user = userRepository.findById(username);
+        if (!user.isPresent()) {
+            return null;
+        }
+        return user.get();
     }
 
     @Override
@@ -51,5 +55,5 @@ public class UserServiceImpl implements UserService{
         // TODO Auto-generated method stub
         return null;
     }
-    
+
 }
