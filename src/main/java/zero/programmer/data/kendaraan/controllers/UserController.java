@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -109,6 +110,24 @@ public class UserController {
         responseDataList.setData(listUser);
         return ResponseEntity.ok().body(responseDataList);
 
+    }
+
+    @DeleteMapping("/{username}")
+    public ResponseEntity<ResponseData<String>> deleteUser(@PathVariable("username") String username){
+        ResponseData<String> responseData = new ResponseData<>();
+        String message = userService.removeUser(username);
+        if (message == null){
+            responseData.setCode(404);
+            responseData.setStatus("NOT FOUND");
+            responseData.getMessages().add("Data dengan username tidak tersedia");
+            responseData.setData(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+        }
+        responseData.setCode(200);
+        responseData.setStatus("OK");
+        responseData.getMessages().add(message);
+        responseData.setData(null);
+        return ResponseEntity.ok().body(responseData);
     }
 
     /**
