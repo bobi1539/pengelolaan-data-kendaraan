@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import zero.programmer.data.kendaraan.entities.Vehicle;
 import zero.programmer.data.kendaraan.models.ResponseData;
-import zero.programmer.data.kendaraan.models.ResponseListVehicle;
+import zero.programmer.data.kendaraan.models.ResponseDataList;
 import zero.programmer.data.kendaraan.models.VehicleData;
 import zero.programmer.data.kendaraan.services.VehicleService;
 
@@ -91,8 +91,8 @@ public class VehicleController {
      * @return
      */
     @GetMapping()
-    public ResponseListVehicle<Vehicle> listVehicle() {
-        ResponseListVehicle<Vehicle> responseListVehicle = new ResponseListVehicle<>();
+    public ResponseDataList<Vehicle> listVehicle() {
+        ResponseDataList<Vehicle> responseListVehicle = new ResponseDataList<>();
 
         List<Vehicle> vehicles = vehicleService.listVehicle();
         if (vehicles.isEmpty()) {

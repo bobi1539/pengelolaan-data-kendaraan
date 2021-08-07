@@ -46,14 +46,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> listUser() {
-        // TODO Auto-generated method stub
-        return null;
+        return userRepository.findAll();
     }
 
     @Override
     public String removeUser(String username) {
-        // TODO Auto-generated method stub
-        return null;
+        boolean userIsExists = userRepository.findById(username).isPresent();
+        if (!userIsExists){
+            return null;
+        }
+        userRepository.deleteById(username);
+        return "Data berhasil dihapus";
     }
 
     @Override

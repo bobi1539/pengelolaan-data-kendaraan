@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import zero.programmer.data.kendaraan.entities.User;
 import zero.programmer.data.kendaraan.models.ResponseData;
+import zero.programmer.data.kendaraan.models.ResponseDataList;
 import zero.programmer.data.kendaraan.services.UserService;
 
 @RestController
@@ -83,6 +84,30 @@ public class UserController {
                     setResponseData(404, "NOT FOUND", Arrays.asList("Data dengan username tidak ditemukan"), null));
         }
         return ResponseEntity.ok().body(setResponseData(200, "OK", null, user));
+
+    }
+
+    /**
+     * get list data user
+     * @return
+     */
+    @GetMapping()
+    public ResponseEntity<ResponseDataList<User>> listUser(){
+        ResponseDataList<User> responseDataList = new ResponseDataList<>();
+
+        List<User> listUser = userService.listUser();
+        if (listUser.isEmpty()){
+            responseDataList.setCode(404);
+            responseDataList.setStatus("NOT FOUND");
+            responseDataList.getMessages().add("Data tidak ditemukan");
+            responseDataList.setData(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDataList);
+        }
+        responseDataList.setCode(200);
+        responseDataList.setStatus("OK");
+        responseDataList.setMessages(null);
+        responseDataList.setData(listUser);
+        return ResponseEntity.ok().body(responseDataList);
 
     }
 

@@ -3,7 +3,7 @@ package zero.programmer.data.kendaraan.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResponseListVehicle<T> {
+public class ResponseDataList<T> {
     
     private Integer code;
 
