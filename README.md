@@ -200,3 +200,168 @@ Response :
     "data": null
 }
 ```
+
+## Create User
+
+Request : 
+- Method : POST
+- Endpoint : '/api/users'
+- Header : 
+    - Content-Type : application/json
+    - Accept : application/json
+- Body :
+```json
+{
+	"username" : "string",
+	"password" : "string",
+	"fullName" : "string",
+	"employeeNumber" : "string",
+	"position" : "string",
+	"workUnit" : "string",
+	"roleId" : "enum (ADMIN, USER, KARYAWAN)"
+}
+```
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "username" : "string",
+        "password" : "string",
+        "fullName" : "string",
+        "employeeNumber" : "string",
+        "position" : "string",
+        "workUnit" : "string",
+        "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+    }
+}
+```
+
+## Get User
+
+Request : 
+- Method : GET
+- Endpoint : '/api/users/{username}'
+- Header :
+    - Accept : application/json
+
+Response :
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": null,
+    "data": {
+        "username" : "string",
+        "password" : "string",
+        "fullName" : "string",
+        "employeeNumber" : "string",
+        "position" : "string",
+        "workUnit" : "string",
+        "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+    }
+}
+```
+
+## Update User
+
+Request : 
+- Method : PUT
+- Endpoint : '/api/users'
+- Header : 
+    - Content-Type : application/json
+    - Accept : application/json
+- Body :
+```json
+{
+	"username" : "string",
+    "password" : "string",
+    "fullName" : "string",
+    "employeeNumber" : "string",
+    "position" : "string",
+    "workUnit" : "string",
+    "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+}
+```
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "username" : "string",
+        "password" : "string",
+        "fullName" : "string",
+        "employeeNumber" : "string",
+        "position" : "string",
+        "workUnit" : "string",
+        "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+    }
+}
+```
+
+## List User
+
+Request :
+- Method : GET
+- Endpoint : '/api/users'
+- Header :
+    - Accept : application/json
+
+Response :
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": null,
+    "data": [
+        {
+            "username" : "string",
+            "password" : "string",
+            "fullName" : "string",
+            "employeeNumber" : "string",
+            "position" : "string",
+            "workUnit" : "string",
+            "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+        },
+        {
+            "username" : "string",
+            "password" : "string",
+            "fullName" : "string",
+            "employeeNumber" : "string",
+            "position" : "string",
+            "workUnit" : "string",
+            "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+        }
+    ]
+}
+```
+
+## Delete User
+
+Request :
+- Method : DELETE
+- Endpoint : '/api/users/{username}
+- Header :
+    - Accept : application/json
+
+Response :
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": null
+}
+```
