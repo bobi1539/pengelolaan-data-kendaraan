@@ -218,7 +218,7 @@ Request :
 	"employeeNumber" : "string",
 	"position" : "string",
 	"workUnit" : "string",
-	"roleId" : "enum (ADMIN, USER, KARYAWAN)"
+	"roleId" : "enum (ADMIN, KARYAWAN, KABID)"
 }
 ```
 
@@ -237,7 +237,7 @@ Response :
         "employeeNumber" : "string",
         "position" : "string",
         "workUnit" : "string",
-        "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+        "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
     }
 }
 ```
@@ -263,7 +263,7 @@ Response :
         "employeeNumber" : "string",
         "position" : "string",
         "workUnit" : "string",
-        "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+        "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
     }
 }
 ```
@@ -285,7 +285,7 @@ Request :
     "employeeNumber" : "string",
     "position" : "string",
     "workUnit" : "string",
-    "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+    "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
 }
 ```
 
@@ -304,7 +304,7 @@ Response :
         "employeeNumber" : "string",
         "position" : "string",
         "workUnit" : "string",
-        "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+        "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
     }
 }
 ```
@@ -331,7 +331,7 @@ Response :
             "employeeNumber" : "string",
             "position" : "string",
             "workUnit" : "string",
-            "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+            "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
         },
         {
             "username" : "string",
@@ -340,7 +340,7 @@ Response :
             "employeeNumber" : "string",
             "position" : "string",
             "workUnit" : "string",
-            "roleId" : "enum (ADMIN, USER, KARYAWAN)"
+            "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
         }
     ]
 }
