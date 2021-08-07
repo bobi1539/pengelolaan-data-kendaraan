@@ -8,6 +8,8 @@ public interface UserService {
 
     public User createUser(User user);
 
+    public User updateUser(User user);
+
     public User getUser(String username);
 
     public List<User> listUser();

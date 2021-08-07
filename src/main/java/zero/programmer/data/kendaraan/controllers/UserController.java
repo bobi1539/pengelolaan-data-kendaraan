@@ -16,6 +16,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,9 +44,36 @@ public class UserController {
      */
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<User>> create(@Valid @RequestBody User user, Errors errors) {
-        return createOrUpdate(user, errors, "Data berhasil ditambahkan");
+        return createOrUpdate(
+            user, 
+            errors, 
+            "Data dengan username tersebut telah tersedia",
+            "Data berhasil di simpan",
+            userService.createUser(user)    
+        );
     }
 
+    /**
+     * update user dengan method PUT
+     * @param user
+     * @param errors
+     * @return
+     */
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseData<User>> update(@Valid @RequestBody User user, Errors errors){
+        return createOrUpdate(
+            user, 
+            errors,
+            "Data dengan username tidak ditemukan",
+            "Data berhasil diubah",
+            userService.updateUser(user));
+    }
+
+    /**
+     * ambil data user berdasarkan username
+     * @param username
+     * @return
+     */
     @GetMapping("/{username}")
     public ResponseEntity<ResponseData<User>> getUser(@PathVariable("username") String username) {
 
@@ -58,6 +86,11 @@ public class UserController {
 
     }
 
+    /**
+     * function teting login untuk user
+     * @param user
+     * @return
+     */
     @GetMapping("/login")
     public ResponseEntity<ResponseData<User>> tesUser(@RequestBody User user){
         User userData = userService.getUser(user.getUsername());
@@ -84,31 +117,30 @@ public class UserController {
      * @param messages
      * @return
      */
-    private ResponseEntity<ResponseData<User>> createOrUpdate(User user, Errors errors, String messages) {
-        ResponseData<User> responseData = new ResponseData<>();
+    private ResponseEntity<ResponseData<User>> createOrUpdate(
+        User user, 
+        Errors errors, 
+        String messages1,
+        String messages2,
+        User userReturnFromService) {
 
         List<String> messagesList = new ArrayList<>();
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 messagesList.add(error.getDefaultMessage());
             }
-            responseData.setCode(400);
-            responseData.setStatus("BAD REQUEST");
-            responseData.setData(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(setResponseData(400, "BAD REQUEST", messagesList, null));
         }
-        // save ke service
-        User userReturnFromService = userService.createUser(user);
 
         if (userReturnFromService == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    setResponseData(400, "BAD REQUEST", Arrays.asList("Data dengan username telah tersedia"), null));
+                    setResponseData(400, "BAD REQUEST", Arrays.asList(messages1), null));
         }
         // agar tidak menampilkan password hash
         userReturnFromService.setPassword("This secret password hash");
 
-        return ResponseEntity.ok().body(setResponseData(200, "OK", Arrays.asList(messages), userReturnFromService));
+        return ResponseEntity.ok().body(setResponseData(200, "OK", Arrays.asList(messages2), userReturnFromService));
     }
 
     /**

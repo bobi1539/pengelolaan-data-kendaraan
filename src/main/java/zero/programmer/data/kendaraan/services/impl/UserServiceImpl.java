@@ -56,4 +56,16 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public User updateUser(User user) {
+        boolean userExists = userRepository.findById(user.getUsername()).isPresent();
+        if (!userExists){
+            return null;
+        }
+
+        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        return userRepository.save(user);
+    }
+
 }
