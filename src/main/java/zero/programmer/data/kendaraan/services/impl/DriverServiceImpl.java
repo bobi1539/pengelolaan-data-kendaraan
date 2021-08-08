@@ -1,5 +1,6 @@
 package zero.programmer.data.kendaraan.services.impl;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import zero.programmer.data.kendaraan.entities.Driver;
 import zero.programmer.data.kendaraan.repositories.DriverRepository;
@@ -67,7 +69,17 @@ public class DriverServiceImpl implements DriverService{
     @Override
     public Driver updatePartialDriver(String idDriver, Map<Object, Object> fields) {
         
-        return null;
+        Optional<Driver> driver = driverRepository.findById(idDriver);
+        if (!driver.isPresent()){
+            return null;
+        }
+        fields.forEach((key, value) -> {
+            Field field = ReflectionUtils.findField(Driver.class, (String) key);
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, driver.get(), value);
+        });
+        return driverRepository.save(driver.get());
+
     }
     
     private boolean isDriverExists(String idDriver){
