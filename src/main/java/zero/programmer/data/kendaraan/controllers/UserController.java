@@ -48,6 +48,16 @@ public class UserController {
      */
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<User>> create(@Valid @RequestBody User user, Errors errors) {
+
+        List<String> messagesList = new ArrayList<>();
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                messagesList.add(error.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(setResponseData(400, "BAD REQUEST", messagesList, null));
+        }
+
         return createOrUpdate(
             userService.createUser(user),
             errors, 
@@ -64,6 +74,16 @@ public class UserController {
      */
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<User>> update(@Valid @RequestBody User user, Errors errors){
+        
+        List<String> messagesList = new ArrayList<>();
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                messagesList.add(error.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(setResponseData(400, "BAD REQUEST", messagesList, null));
+        }
+
         return createOrUpdate(
             userService.updateUser(user),
             errors,
@@ -186,15 +206,6 @@ public class UserController {
         Errors errors, 
         String messages1,
         String messages2) {
-
-        List<String> messagesList = new ArrayList<>();
-        if (errors.hasErrors()) {
-            for (ObjectError error : errors.getAllErrors()) {
-                messagesList.add(error.getDefaultMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(setResponseData(400, "BAD REQUEST", messagesList, null));
-        }
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(

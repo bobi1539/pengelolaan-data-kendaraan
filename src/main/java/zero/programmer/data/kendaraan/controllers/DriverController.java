@@ -30,20 +30,7 @@ public class DriverController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<Driver>> createDriver(@Valid @RequestBody Driver driver, Errors errors){
-        return createOrUpdate(
-            driverService.createDriver(driver),
-            errors,
-            "Data dengan id driver : " + driver.getIdDriver() + " telah tersedia",
-            "Data berhasil ditambahkan"
-        );
-    }
 
-    private ResponseEntity<ResponseData<Driver>> createOrUpdate(
-        Driver driver,
-        Errors errors,
-        String message1,
-        String message2
-    ){
         List<String> messageList = new ArrayList<>();
         if (errors.hasErrors()){
             for(ObjectError error : errors.getAllErrors()){
@@ -59,11 +46,25 @@ public class DriverController {
             );
         }
 
+        return createOrUpdate(
+            driverService.createDriver(driver),
+            errors,
+            "Data dengan id driver : " + driver.getIdDriver() + " telah tersedia",
+            "Data berhasil ditambahkan"
+        );
+    }
+
+    private ResponseEntity<ResponseData<Driver>> createOrUpdate(
+        Driver driver,
+        Errors errors,
+        String message1,
+        String message2
+    ){
         if (driver == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ResponseData<Driver>(
-                    404,
-                    "NOT FOUND",
+                    400,
+                    "BAD REQUEST",
                     Arrays.asList(message1),
                     null
                 )  
