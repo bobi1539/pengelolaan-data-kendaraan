@@ -87,7 +87,7 @@ Response :
 }
 ```
 
-## Update Vehicle
+## Update Vehicle PUT Method
 
 Request : 
 - Method : PUT
@@ -99,6 +99,56 @@ Request :
 ```json
 {
 	"registrationNumber" : "string",
+	"name" : "string",
+	"merk" : "string",
+	"chassisNumber" : "string",
+	"machineNumber" : "string",
+	"policeNumber" : "string",
+	"purchaseDate" : "date",
+	"acquisitionValue" : "long",
+	"location" : "string",
+	"condition" : "string",
+	"isBorrow" : "boolean"
+}
+```
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "registrationNumber" : "string",
+        "name" : "string",
+        "merk" : "string",
+        "chassisNumber" : "string",
+        "machineNumber" : "string",
+        "policeNumber" : "string",
+        "purchaseDate" : "date",
+        "acquisitionValue" : "long",
+        "location" : "string",
+        "condition" : "string",
+        "isBorrow" : "boolean"
+    }
+}
+```
+
+## Update Vehicle PATCH Method
+
+- This method can be update vehicle by partial
+
+Request : 
+- Method : PATCH
+- Endpoint : '/api/vehicles/{registrationNumber}'
+- Header : 
+    - Content-Type : application/json
+    - Accept : application/json
+- Body :
+```json
+{
 	"name" : "string",
 	"merk" : "string",
 	"chassisNumber" : "string",
@@ -268,7 +318,7 @@ Response :
 }
 ```
 
-## Update User
+## Update User PUT Method
 
 Request : 
 - Method : PUT
@@ -280,6 +330,48 @@ Request :
 ```json
 {
 	"username" : "string",
+    "password" : "string",
+    "fullName" : "string",
+    "employeeNumber" : "string",
+    "position" : "string",
+    "workUnit" : "string",
+    "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
+}
+```
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "username" : "string",
+        "password" : "string",
+        "fullName" : "string",
+        "employeeNumber" : "string",
+        "position" : "string",
+        "workUnit" : "string",
+        "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
+    }
+}
+```
+
+## Update User PATCH Method
+
+- This method can be update user by partial
+
+Request : 
+- Method : PATCH
+- Endpoint : '/api/users/{username}'
+- Header : 
+    - Content-Type : application/json
+    - Accept : application/json
+- Body :
+```json
+{
     "password" : "string",
     "fullName" : "string",
     "employeeNumber" : "string",

@@ -13,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import zero.programmer.data.kendaraan.entities.User;
+import zero.programmer.data.kendaraan.models.UserData;
 import zero.programmer.data.kendaraan.repositories.UserRepository;
 import zero.programmer.data.kendaraan.services.UserService;
+import zero.programmer.data.kendaraan.utils.RoleIdEnum;
 
 @Service
 @Transactional
@@ -77,10 +79,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updatePartial(String username, Map<Object, Object> fields) {
         
+        // find user dari database
         Optional<User> user = userRepository.findById(username);
+
+        // set data user ke objek user data agar bisa di reflesikan role id nya,
+        // di UserData tipe role id adalah string agar bisa di reflection util
+        UserData userData = new UserData();
+        userData.setUsername(user.get().getUsername());
+        userData.setPassword(user.get().getPassword());
+        userData.setFullName(user.get().getFullName());
+        userData.setEmployeeNumber(user.get().getEmployeeNumber());
+        userData.setPosition(user.get().getPosition());
+        userData.setWorkUnit(user.get().getWorkUnit());
+        userData.setRoleId(String.valueOf(user.get().getRoleId()));
+
+        // cek jika user ada 
         if (user.isPresent()){
             fields.forEach((key, value) -> {
-                Field field = ReflectionUtils.findField(User.class, (String) key);
+                Field field = ReflectionUtils.findField(UserData.class, (String) key);
                 field.setAccessible(true);
 
                 // cek jika yang di ubah adalah password, maka di encode
@@ -88,10 +104,34 @@ public class UserServiceImpl implements UserService {
                     value = bCryptPasswordEncoder.encode(value.toString());
                 }
 
-                ReflectionUtils.setField(field, user.get(), value);
+                ReflectionUtils.setField(field, userData, value);
             });
+            // set user data baru dari userdata
+            user.get().setUsername(userData.getUsername());
+            user.get().setPassword(userData.getPassword());
+            user.get().setFullName(userData.getFullName());
+            user.get().setEmployeeNumber(userData.getEmployeeNumber());
+            user.get().setPosition(userData.getPosition());
+            user.get().setWorkUnit(userData.getWorkUnit());
+            user.get().setRoleId(RoleIdEnum.valueOf(userData.getRoleId()));
             return userRepository.save(user.get());
         }
+
+        // yang sebelumnya
+        // if (user.isPresent()){
+        //     fields.forEach((key, value) -> {
+        //         Field field = ReflectionUtils.findField(User.class, (String) key);
+        //         field.setAccessible(true);
+
+        //         // cek jika yang di ubah adalah password, maka di encode
+        //         if (key.equals("password")){
+        //             value = bCryptPasswordEncoder.encode(value.toString());
+        //         }
+
+        //         ReflectionUtils.setField(field, user.get(), value);
+        //     });
+        //     return userRepository.save(user.get());
+        // }
 
         return null;
     }
