@@ -2,6 +2,7 @@ package zero.programmer.data.kendaraan.services.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -21,9 +22,7 @@ public class DriverServiceImpl implements DriverService{
 
     @Override
     public Driver createDriver(Driver driver) {
-        
-        boolean driverExists = driverRepository.findById(driver.getIdDriver()).isPresent();
-        if (driverExists){
+        if (isDriverExists(driver.getIdDriver())){
             return null;
         }
 
@@ -32,26 +31,37 @@ public class DriverServiceImpl implements DriverService{
 
     @Override
     public Driver updateDriver(Driver driver) {
-        
-        return null;
+        if (!isDriverExists(driver.getIdDriver())){
+            return null;    
+        }
+        return driverRepository.save(driver);
     }
 
     @Override
     public Driver getDriver(String idDriver) {
-        
-        return null;
+        Optional<Driver> driver = driverRepository.findById(idDriver);
+        if (!isDriverExists(idDriver)){
+            return null;
+        }
+        return driver.get();
     }
 
     @Override
     public List<Driver> listDriver() {
-        
-        return null;
+        List<Driver> listDriver = driverRepository.findAll();
+        if (listDriver.isEmpty()){
+            return null;
+        }
+        return listDriver;
     }
 
     @Override
     public String deleteDriver(String idDriver) {
-        
-        return null;
+        if (!isDriverExists(idDriver)){
+            return null;
+        }
+        driverRepository.deleteById(idDriver);
+        return "Data berhasil dihapus";
     }
 
     @Override
@@ -60,4 +70,8 @@ public class DriverServiceImpl implements DriverService{
         return null;
     }
     
+    private boolean isDriverExists(String idDriver){
+        return driverRepository.findById(idDriver).isPresent();
+    }
+
 }
