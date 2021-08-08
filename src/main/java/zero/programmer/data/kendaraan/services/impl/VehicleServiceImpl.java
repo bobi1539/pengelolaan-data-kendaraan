@@ -69,7 +69,7 @@ public class VehicleServiceImpl implements VehicleService{
                 field.setAccessible(true);
                 ReflectionUtils.setField(field, vehicle.get(), value);
             });
-            return vehicle.get();
+            return vehicleRepository.save(vehicle.get());
         }
 
         return null;

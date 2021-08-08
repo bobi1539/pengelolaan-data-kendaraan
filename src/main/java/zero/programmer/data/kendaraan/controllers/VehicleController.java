@@ -87,6 +87,12 @@ public class VehicleController {
         return createOrUpdate(vehicleData, errors, "Data berhasil diubah");
     }
 
+    /**
+     * update secara partial/tidak semua field yang di update dengan method PATCH
+     * @param registrationNumber
+     * @param fields
+     * @return
+     */
     @PatchMapping("/{registrationNumber}")
     public ResponseEntity<ResponseData<Vehicle>> patchUpdate(@PathVariable("registrationNumber") String registrationNumber, @RequestBody Map<Object, Object> fields){
         ResponseData<Vehicle> responseData = new ResponseData<>();

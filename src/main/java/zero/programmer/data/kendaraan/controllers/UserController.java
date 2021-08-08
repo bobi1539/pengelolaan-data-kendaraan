@@ -3,6 +3,7 @@ package zero.programmer.data.kendaraan.controllers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -15,6 +16,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -128,6 +130,25 @@ public class UserController {
         responseData.getMessages().add(message);
         responseData.setData(null);
         return ResponseEntity.ok().body(responseData);
+    }
+
+    /**
+     * update user dengan partial/tidak semua field di update/ sebagian field di update
+     * @param username
+     * @param fields
+     * @return
+     */
+    @PatchMapping(path = "/{username}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseData<User>> updatePartial(@PathVariable("username") String username, @RequestBody Map<Object, Object> fields){
+        User userData = userService.updatePartial(username, fields);
+        if (userData == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                setResponseData(404, "NOT FOUND", Arrays.asList("Data dengan username : " + username + " tidak ditemukan"), null)
+            );
+        }
+        return ResponseEntity.ok().body(
+            setResponseData(200, "OK", Arrays.asList("Data berhasil di update"), userData)
+        );
     }
 
     /**
