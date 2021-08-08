@@ -469,7 +469,7 @@ Request :
 - Body :
 ```json
 {
-	"idDriver" : "integer (Auto Increment)",
+	"idDriver" : "string",
 	"fullName" : "string",
 	"phoneNumber" : "string",
 	"address" : "string",
@@ -486,7 +486,7 @@ Response :
         "string"
     ],
     "data": {
-        "idDriver" : "integer (Auto Increment)",
+        "idDriver" : "string",
         "fullName" : "string",
         "phoneNumber" : "string",
         "address" : "string",
@@ -495,7 +495,44 @@ Response :
 }
 ```
 
-## Update Driver
+## Update Driver Method PUT
+
+Request : 
+- Method : PUT
+- Endpoint : '/api/drivers'
+- Header : 
+    - Content-Type : application/json
+    - Accept : application/json
+- Body :
+```json
+{
+    "idDriver" : "string",
+	"fullName" : "string",
+	"phoneNumber" : "string",
+	"address" : "string",
+	"isOnDuty" : "boolean"
+}
+```
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "idDriver" : "string",
+        "fullName" : "string",
+        "phoneNumber" : "string",
+        "address" : "string",
+        "isOnDuty" : "boolean"
+    }
+}
+```
+
+## Update Driver Method PATCH
 
 Request : 
 - Method : PATCH
@@ -522,7 +559,7 @@ Response :
         "string"
     ],
     "data": {
-        "idDriver" : "integer (Auto Increment)",
+        "idDriver" : "string",
         "fullName" : "string",
         "phoneNumber" : "string",
         "address" : "string",
@@ -548,7 +585,7 @@ Response :
         "string"
     ],
     "data": {
-        "idDriver" : "integer (Auto Increment)",
+        "idDriver" : "string",
         "fullName" : "string",
         "phoneNumber" : "string",
         "address" : "string",
@@ -575,14 +612,14 @@ Response :
     ],
     "data": [
         {
-            "idDriver" : "integer (Auto Increment)",
+            "idDriver" : "string",
             "fullName" : "string",
             "phoneNumber" : "string",
             "address" : "string",
             "isOnDuty" : "boolean"
         },
         {
-            "idDriver" : "integer (Auto Increment)",
+            "idDriver" : "string",
             "fullName" : "string",
             "phoneNumber" : "string",
             "address" : "string",
@@ -592,11 +629,11 @@ Response :
 }
 ```
 
-## List Driver
+## Delete Driver
 
 Request : 
 - Method : DELETE
-- Endpoint : '/api/drivers/idDrivers'
+- Endpoint : '/api/drivers/{idDrivers}'
 - Header : 
     - Accept : application/json
 

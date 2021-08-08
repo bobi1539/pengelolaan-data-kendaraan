@@ -49,11 +49,10 @@ public class UserController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<User>> create(@Valid @RequestBody User user, Errors errors) {
         return createOrUpdate(
-            user, 
+            userService.createUser(user),
             errors, 
             "Data dengan username tersebut telah tersedia",
-            "Data berhasil di simpan",
-            userService.createUser(user)    
+            "Data berhasil di simpan"
         );
     }
 
@@ -66,11 +65,11 @@ public class UserController {
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseData<User>> update(@Valid @RequestBody User user, Errors errors){
         return createOrUpdate(
-            user, 
+            userService.updateUser(user),
             errors,
             "Data dengan username tidak ditemukan",
-            "Data berhasil diubah",
-            userService.updateUser(user));
+            "Data berhasil diubah"
+            );
     }
 
     /**
@@ -186,8 +185,7 @@ public class UserController {
         User user, 
         Errors errors, 
         String messages1,
-        String messages2,
-        User userReturnFromService) {
+        String messages2) {
 
         List<String> messagesList = new ArrayList<>();
         if (errors.hasErrors()) {
@@ -198,14 +196,14 @@ public class UserController {
                     .body(setResponseData(400, "BAD REQUEST", messagesList, null));
         }
 
-        if (userReturnFromService == null) {
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     setResponseData(400, "BAD REQUEST", Arrays.asList(messages1), null));
         }
         // agar tidak menampilkan password hash
-        userReturnFromService.setPassword("This secret password hash");
+        user.setPassword("This secret password hash");
 
-        return ResponseEntity.ok().body(setResponseData(200, "OK", Arrays.asList(messages2), userReturnFromService));
+        return ResponseEntity.ok().body(setResponseData(200, "OK", Arrays.asList(messages2), user));
     }
 
     /**
