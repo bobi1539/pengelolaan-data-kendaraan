@@ -1,6 +1,8 @@
 package zero.programmer.data.kendaraan.services.impl;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -8,6 +10,7 @@ import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import zero.programmer.data.kendaraan.entities.Vehicle;
 import zero.programmer.data.kendaraan.models.VehicleData;
@@ -54,6 +57,22 @@ public class VehicleServiceImpl implements VehicleService{
         }
         vehicleRepository.deleteById(registrationNumber);
         return "Data berhasil dihapus";
+    }
+
+    @Override
+    public Vehicle updatePartial(String registrationNumber, Map<Object, Object> fields) {
+        
+        Optional<Vehicle> vehicle = vehicleRepository.findById(registrationNumber);
+        if(vehicle.isPresent()){
+            fields.forEach((key, value) -> {
+                Field field = ReflectionUtils.findField(Vehicle.class, (String) key);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, vehicle.get(), value);
+            });
+            return vehicle.get();
+        }
+
+        return null;
     }
     
 }

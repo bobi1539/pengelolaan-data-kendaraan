@@ -1,6 +1,7 @@
 package zero.programmer.data.kendaraan.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -12,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -83,6 +85,24 @@ public class VehicleController {
     public ResponseEntity<ResponseData<VehicleData>> update(@Valid @RequestBody VehicleData vehicleData,
             Errors errors) {
         return createOrUpdate(vehicleData, errors, "Data berhasil diubah");
+    }
+
+    @PatchMapping("/{registrationNumber}")
+    public ResponseEntity<ResponseData<Vehicle>> patchUpdate(@PathVariable("registrationNumber") String registrationNumber, @RequestBody Map<Object, Object> fields){
+        ResponseData<Vehicle> responseData = new ResponseData<>();
+        Vehicle vehicleData = vehicleService.updatePartial(registrationNumber, fields);
+        if (vehicleData == null){
+            responseData.setCode(404);
+            responseData.setStatus("NOT FOUND");
+            responseData.getMessages().add("Data dengan no registrasi tersebut tidak ditemukan");
+            responseData.setData(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseData);
+        }
+        responseData.setCode(200);
+        responseData.setStatus("OK");
+        responseData.getMessages().add("Data berhasil di update");
+        responseData.setData(vehicleData);
+        return ResponseEntity.ok().body(responseData);
     }
 
     /**
