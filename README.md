@@ -457,3 +457,157 @@ Response :
     "data": null
 }
 ```
+
+## Create Driver
+
+Request : 
+- Method : POST
+- Endpoint : '/api/drivers'
+- Header : 
+    - Content-Type : application/json
+    - Accept : application/json
+- Body :
+```json
+{
+	"idDriver" : "integer (Auto Increment)",
+	"fullName" : "string",
+	"phoneNumber" : "string",
+	"address" : "string",
+	"isOnDuty" : "boolean"
+}
+```
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "idDriver" : "integer (Auto Increment)",
+        "fullName" : "string",
+        "phoneNumber" : "string",
+        "address" : "string",
+        "isOnDuty" : "boolean"
+    }
+}
+```
+
+## Update Driver
+
+Request : 
+- Method : PATCH
+- Endpoint : '/api/drivers/{idDriver}'
+- Header : 
+    - Content-Type : application/json
+    - Accept : application/json
+- Body :
+```json
+{
+	"fullName" : "string",
+	"phoneNumber" : "string",
+	"address" : "string",
+	"isOnDuty" : "boolean"
+}
+```
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "idDriver" : "integer (Auto Increment)",
+        "fullName" : "string",
+        "phoneNumber" : "string",
+        "address" : "string",
+        "isOnDuty" : "boolean"
+    }
+}
+```
+
+## Get Driver
+
+Request : 
+- Method : GET
+- Endpoint : '/api/drivers/{idDriver}'
+- Header : 
+    - Accept : application/json
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "idDriver" : "integer (Auto Increment)",
+        "fullName" : "string",
+        "phoneNumber" : "string",
+        "address" : "string",
+        "isOnDuty" : "boolean"
+    }
+}
+```
+
+## List Driver
+
+Request : 
+- Method : GET
+- Endpoint : '/api/drivers'
+- Header : 
+    - Accept : application/json
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": [
+        {
+            "idDriver" : "integer (Auto Increment)",
+            "fullName" : "string",
+            "phoneNumber" : "string",
+            "address" : "string",
+            "isOnDuty" : "boolean"
+        },
+        {
+            "idDriver" : "integer (Auto Increment)",
+            "fullName" : "string",
+            "phoneNumber" : "string",
+            "address" : "string",
+            "isOnDuty" : "boolean"
+        }
+    ]
+}
+```
+
+## List Driver
+
+Request : 
+- Method : DELETE
+- Endpoint : '/api/drivers/idDrivers'
+- Header : 
+    - Accept : application/json
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": null
+}
+```
