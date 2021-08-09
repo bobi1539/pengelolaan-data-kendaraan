@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        if (userIsExists(user.getUsername())){
+        if (!userIsExists(user.getUsername())){
             return null;
         }
 

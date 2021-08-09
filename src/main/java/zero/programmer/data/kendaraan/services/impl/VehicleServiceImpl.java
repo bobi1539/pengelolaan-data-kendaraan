@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import zero.programmer.data.kendaraan.entities.Vehicle;
+import zero.programmer.data.kendaraan.error.NullPointerException;
 import zero.programmer.data.kendaraan.models.VehicleData;
 import zero.programmer.data.kendaraan.repositories.VehicleRepository;
 import zero.programmer.data.kendaraan.services.VehicleService;
@@ -29,30 +30,38 @@ public class VehicleServiceImpl implements VehicleService{
 
     @Override
     public VehicleData create(VehicleData vehicleData) {
+
+        if (isVehicleExists(vehicleData.getRegistrationNumber())){
+            return null;
+        }
+        
         Vehicle vehicle = modelMapper.map(vehicleData, Vehicle.class);
         vehicleRepository.save(vehicle);
         return vehicleData;
     }
 
     @Override
-    public VehicleData getVehicle(String registrationNumber) {
+    public VehicleData getVehicle(String registrationNumber) throws NullPointerException{
         Optional<Vehicle> vehicle = vehicleRepository.findById(registrationNumber);
         if (!vehicle.isPresent()){
-            return null;
+            throw new NullPointerException();
         }
         VehicleData vehicleData = modelMapper.map(vehicle.get(), VehicleData.class);
         return vehicleData;
     }
 
     @Override
-    public List<Vehicle> listVehicle() {
-        return vehicleRepository.findAll();
+    public List<Vehicle> listVehicle() throws NullPointerException{
+        List<Vehicle> listVehicle = vehicleRepository.findAll();
+        if (listVehicle.isEmpty()){
+            throw new NullPointerException();
+        }
+        return listVehicle;
     }
 
     @Override
     public String remove(String registrationNumber) {
-        Optional<Vehicle> vehicle = vehicleRepository.findById(registrationNumber);
-        if (!vehicle.isPresent()){
+        if (!isVehicleExists(registrationNumber)){
             return null;
         }
         vehicleRepository.deleteById(registrationNumber);
@@ -73,6 +82,22 @@ public class VehicleServiceImpl implements VehicleService{
         }
 
         return null;
+    }
+
+    @Override
+    public VehicleData updateVehicle(VehicleData vehicleData) {
+        
+        if (!isVehicleExists(vehicleData.getRegistrationNumber())){
+            return null;
+        }
+
+        Vehicle vehicle = modelMapper.map(vehicleData, Vehicle.class);
+        vehicleRepository.save(vehicle);
+        return vehicleData;
+    }
+
+    private boolean isVehicleExists(String registrationNumber){
+        return vehicleRepository.findById(registrationNumber).isPresent();
     }
     
 }
