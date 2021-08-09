@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import zero.programmer.data.kendaraan.entities.User;
+import zero.programmer.data.kendaraan.error.AuthorizationPassword;
+import zero.programmer.data.kendaraan.error.NullPointerException;
+import zero.programmer.data.kendaraan.models.LoginData;
 import zero.programmer.data.kendaraan.models.UserData;
 import zero.programmer.data.kendaraan.repositories.UserRepository;
 import zero.programmer.data.kendaraan.services.UserService;
@@ -30,8 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        boolean userExists = userRepository.findById(user.getUsername()).isPresent();
-        if (userExists) {
+        if (userIsExists(user.getUsername())) {
             return null;
         }
 
@@ -51,13 +53,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> listUser() {
-        return userRepository.findAll();
+        List<User> listUser = userRepository.findAll();
+        if (listUser.isEmpty()){
+            return null;
+        }
+        return listUser;
     }
 
     @Override
     public String removeUser(String username) {
-        boolean userIsExists = userRepository.findById(username).isPresent();
-        if (!userIsExists){
+        if (!userIsExists(username)){
             return null;
         }
         userRepository.deleteById(username);
@@ -66,8 +71,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        boolean userExists = userRepository.findById(user.getUsername()).isPresent();
-        if (!userExists){
+        if (userIsExists(user.getUsername())){
             return null;
         }
 
@@ -134,6 +138,37 @@ public class UserServiceImpl implements UserService {
         // }
 
         return null;
+    }
+
+
+    /** 
+     * method untuk cek login data user
+     * @param loginData
+     * @return
+    */
+    @Override
+    public User checkLoginUser(LoginData loginData) throws Exception{
+
+        Optional<User> user = userRepository.findById(loginData.getUsername());
+        
+        if (user.isPresent()){
+            if (bCryptPasswordEncoder.matches(loginData.getPassword(), user.get().getPassword())){
+                return user.get();
+            } else {
+                throw new AuthorizationPassword();
+            }
+        } else {
+            throw new NullPointerException();
+        }
+    }
+
+    /**
+     * cek apakah user ada di database
+     * @param username
+     * @return
+     */
+    private boolean userIsExists(String username){
+        return userRepository.findById(username).isPresent();
     }
 
 }

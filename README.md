@@ -458,6 +458,44 @@ Response :
 }
 ```
 
+## Login User
+
+- This method use for cek user authentication
+
+Request : 
+- Method : POST
+- Endpoint : '/api/users/login'
+- Header : 
+    - Content-Type : application/json
+    - Accept : application/json
+- Body :
+```json
+{
+    "username" : "string",
+    "password" : "string"
+}
+```
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "username" : "string",
+        "password" : "string",
+        "fullName" : "string",
+        "employeeNumber" : "string",
+        "position" : "string",
+        "workUnit" : "string",
+        "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
+    }
+}
+```
+
 ## Create Driver
 
 Request : 

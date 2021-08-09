@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import zero.programmer.data.kendaraan.entities.User;
+import zero.programmer.data.kendaraan.models.LoginData;
 import zero.programmer.data.kendaraan.models.ResponseData;
 import zero.programmer.data.kendaraan.models.ResponseDataList;
 import zero.programmer.data.kendaraan.services.UserService;
@@ -35,9 +35,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     /**
      * registrasi user
@@ -176,23 +173,29 @@ public class UserController {
      * function teting login untuk user
      * @param user
      * @return
+     * @throws Exception
      */
-    @GetMapping("/login")
-    public ResponseEntity<ResponseData<User>> tesUser(@RequestBody User user){
-        User userData = userService.getUser(user.getUsername());
-        if (userData == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                setResponseData(404, "NOT FOUND", Arrays.asList("Username tidak ditemukan"), null)
-            );
+    @PostMapping(path = "/login",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseData<User>> loginUser(@Valid @RequestBody LoginData loginData, Errors errors) throws Exception{
+
+        List<String> messagesList = new ArrayList<>();
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
+                messagesList.add(error.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(setResponseData(400, "BAD REQUEST", messagesList, null));
         }
-        if (passwordEncoder.matches(user.getPassword(), userData.getPassword())){
-            return ResponseEntity.ok().body(
-                setResponseData(200, "OK", Arrays.asList("Password sama"), userData)
-            );
-        }
+
+        User user = userService.checkLoginUser(loginData);
         return ResponseEntity.ok().body(
-                setResponseData(401, "UNAUTHORIZED", Arrays.asList("Password Tidak sama"), null)
-            );
+            new ResponseData<User>(
+                200,
+                "OK",
+                Arrays.asList("Login berhasil"),
+                user
+            )
+        );
     }
 
     /**
