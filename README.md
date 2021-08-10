@@ -686,3 +686,75 @@ Response :
     "data": null
 }
 ```
+
+## Create Borrow Vehicle
+
+Request : 
+- Method : POST
+- Endpoint : '/api/borrow-vehicles'
+- Header : 
+    - Content-Type : application/json
+    - Accept : application/json
+- Body :
+```json
+{
+	"username" : "string",
+	"registrationNumber" : "string",
+	"idDriver" : "string",
+	"borrowType" : "string",
+	"currentDate" : "date",
+	"necessity" : "string",
+	"borrowDate" : "date",
+	"returnDate" : "date",
+	"destination" : "string"
+}
+```
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": {
+        "idBorrow" : "integer (Auto Increment)",
+        "user" : {
+            "username" : "string",
+            "password" : "string",
+            "fullName" : "string",
+            "employeeNumber" : "string",
+            "position" : "string",
+            "workUnit" : "string",
+            "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
+        },
+        "vehicle" : {
+            "registrationNumber" : "string",
+            "name" : "string",
+            "merk" : "string",
+            "chassisNumber" : "string",
+            "machineNumber" : "string",
+            "policeNumber" : "string",
+            "purchaseDate" : "date",
+            "acquisitionValue" : "long",
+            "location" : "string",
+            "condition" : "string",
+            "isBorrow" : "boolean"
+        },
+        "driver" : {
+            "idDriver" : "string",
+            "fullName" : "string",
+            "phoneNumber" : "string",
+            "address" : "string",
+            "isOnDuty" : "boolean"
+        },
+        "borrowType" : "string",
+        "currentDate" : "date",
+        "necessity" : "string",
+        "borrowDate" : "date",
+        "returnDate" : "date",
+        "destination" : "string"
+    }
+}
+```
