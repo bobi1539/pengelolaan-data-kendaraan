@@ -45,70 +45,89 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
 
     @Override
     public BorrowVehicle createBorrowVehicle(BorrowVehicleData borrowVehicleData) throws NotFoundException, VehicleIsBorrowException, DriverIsOnDutyException {
+
+        boolean allIsValid = true;
         
+        // pindahkan data dari borrowVehicleData ke borrowVehicle
         BorrowVehicle borrowVehicle = modelMapper.map(borrowVehicleData, BorrowVehicle.class);
 
+        // --------- cek bagian user ---------
         User user = userService.getUser(borrowVehicle.getUser().getUsername());
+
         // cek apakah user ada atau tidak
         if (user == null){
+            allIsValid = false;
             throw new NotFoundException();
         }
+        // --------- end cek bagian user ---------
 
+        // --------- cek bagian kendaraan ---------
         VehicleData vehicleData = new VehicleData();
+
         // cek apakah kendaraan ada atau tidak
         try{
             vehicleData  = vehicleService.getVehicle(borrowVehicle.getVehicle().getRegistrationNumber());
         } catch (NullPointerException e){
+            allIsValid = false;
             throw new NotFoundException();
         }
 
         // cek apakah kendaraan dipinjam atau tidak
         if (vehicleData.getIsBorrow()){
+            allIsValid = false;
             throw new VehicleIsBorrowException();
         }
-        
-        // update is borrow menjadi true (tanda bahwa kendaraan sedang dipinjam)
-        Map<Object, Object> updateVehicle = new HashMap<>();
-        updateVehicle.put("isBorrow", true);
-        vehicleService.updatePartial(vehicleData.getRegistrationNumber(), updateVehicle);
+        // --------- end cek bagian kendaraan ---------
 
-        // pindahkan data dari vehicle data ke vehicle
-        Vehicle vehicle = modelMapper.map(vehicleData, Vehicle.class);
-        // over write is borrow menjadi true di data yang akan dikembalikan
-        vehicle.setIsBorrow(true);
-
+        // --------- cek bagian driver ---------
         Driver driver = driverService.getDriver(borrowVehicle.getDriver().getIdDriver());
         // cek driver ada atau tidak
         if (driver == null){
+            allIsValid = false;
             throw new NotFoundException();
         }
 
         // cek driver sedang bertugas atau tidak
         if (driver.getIsOnDuty()){
+            allIsValid = false;
             throw new DriverIsOnDutyException();
         }
-
-        // update driver sedang bertugas
-        Map<Object, Object> updateDriver = new HashMap<>();
-        updateDriver.put("isOnDuty", true);
-        driverService.updatePartialDriver(driver.getIdDriver(), updateDriver);
+        // --------- end cek bagian driver ---------
         
-        // over write driver is on duty
-        driver.setIsOnDuty(true);
+        if (allIsValid){
+            // update is borrow menjadi true (tanda bahwa kendaraan sedang dipinjam)
+            Map<Object, Object> updateVehicle = new HashMap<>();
+            updateVehicle.put("isBorrow", true);
+            vehicleService.updatePartial(vehicleData.getRegistrationNumber(), updateVehicle);
 
-        // over write user dengan data di database
-        // set password agar tidak bisa dilihat
-        user.setPassword(INVISIBLE);
-        borrowVehicle.setUser(user);
+            // pindahkan data dari vehicle data ke vehicle
+            Vehicle vehicle = modelMapper.map(vehicleData, Vehicle.class);
+            // over write is borrow menjadi true di data yang akan dikembalikan
+            vehicle.setIsBorrow(true);
 
-        // over write vehicle dengan data di database
-        borrowVehicle.setVehicle(vehicle);
+            // update driver sedang bertugas
+            Map<Object, Object> updateDriver = new HashMap<>();
+            updateDriver.put("isOnDuty", true);
+            driverService.updatePartialDriver(driver.getIdDriver(), updateDriver);
+            
+            // over write driver is on duty
+            driver.setIsOnDuty(true);
 
-        // over write driver dengan data di database
-        borrowVehicle.setDriver(driver);
+            // over write user dengan data di database
+            // set password agar tidak bisa dilihat
+            user.setPassword(INVISIBLE);
+            borrowVehicle.setUser(user);
 
-        return repository.save(borrowVehicle);
+            // over write vehicle dengan data di database
+            borrowVehicle.setVehicle(vehicle);
+
+            // over write driver dengan data di database
+            borrowVehicle.setDriver(driver);
+
+            return repository.save(borrowVehicle);
+        } else {
+            return null;
+        }
     }
-
     
 }
