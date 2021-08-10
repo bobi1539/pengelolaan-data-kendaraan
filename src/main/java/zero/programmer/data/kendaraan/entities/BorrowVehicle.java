@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -19,12 +20,15 @@ public class BorrowVehicle {
     private Integer idBorrow;
 
     @ManyToOne
+    @JoinColumn(name = "username")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "registration_number")
     private Vehicle vehicle;
     
     @ManyToOne
+    @JoinColumn(name = "id_driver")
     private Driver driver;
     
     @Column(name = "borrow_type")

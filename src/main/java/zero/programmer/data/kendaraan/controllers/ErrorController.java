@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import zero.programmer.data.kendaraan.error.AuthorizationPassword;
+import zero.programmer.data.kendaraan.error.DriverIsOnDutyException;
+import zero.programmer.data.kendaraan.error.NotFoundException;
 import zero.programmer.data.kendaraan.error.NullPointerException;
 import zero.programmer.data.kendaraan.error.UnauthorizedException;
+import zero.programmer.data.kendaraan.error.VehicleIsBorrowException;
 import zero.programmer.data.kendaraan.models.ResponseData;
 
 @RestControllerAdvice
@@ -64,4 +67,39 @@ public class ErrorController {
         );
     }
 
+    @ExceptionHandler(value = NotFoundException.class)
+    public ResponseEntity<ResponseData<String>> userNotFound(){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            new ResponseData<>(
+                404,
+                "NOT FOUND",
+                Arrays.asList("Data tidak ditemukan"),
+                null
+            )
+        );
+    }
+
+    @ExceptionHandler(value = VehicleIsBorrowException.class)
+    public ResponseEntity<ResponseData<String>> vehicleIsBorrow(){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            new ResponseData<>(
+                400,
+                "BAD REQUEST",
+                Arrays.asList("Kendaraan sedang dipinjam"),
+                null
+            )
+        );
+    }
+
+    @ExceptionHandler(value = DriverIsOnDutyException.class)
+    public ResponseEntity<ResponseData<String>> driverIsOnDuty(){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            new ResponseData<>(
+                400,
+                "BAD REQUEST",
+                Arrays.asList("Sopir sedang bertugas"),
+                null
+            )
+        );
+    }
 }

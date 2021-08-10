@@ -702,7 +702,6 @@ Request :
 	"registrationNumber" : "string",
 	"idDriver" : "string",
 	"borrowType" : "string",
-	"currentDate" : "date",
 	"necessity" : "string",
 	"borrowDate" : "date",
 	"returnDate" : "date",
@@ -721,33 +720,13 @@ Response :
     "data": {
         "idBorrow" : "integer (Auto Increment)",
         "user" : {
-            "username" : "string",
-            "password" : "string",
-            "fullName" : "string",
-            "employeeNumber" : "string",
-            "position" : "string",
-            "workUnit" : "string",
-            "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
+            "username" : "string"
         },
         "vehicle" : {
-            "registrationNumber" : "string",
-            "name" : "string",
-            "merk" : "string",
-            "chassisNumber" : "string",
-            "machineNumber" : "string",
-            "policeNumber" : "string",
-            "purchaseDate" : "date",
-            "acquisitionValue" : "long",
-            "location" : "string",
-            "condition" : "string",
-            "isBorrow" : "boolean"
+            "registrationNumber" : "string"
         },
         "driver" : {
-            "idDriver" : "string",
-            "fullName" : "string",
-            "phoneNumber" : "string",
-            "address" : "string",
-            "isOnDuty" : "boolean"
+            "idDriver" : "string"
         },
         "borrowType" : "string",
         "currentDate" : "date",

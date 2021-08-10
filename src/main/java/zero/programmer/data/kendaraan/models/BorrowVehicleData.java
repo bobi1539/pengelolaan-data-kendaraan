@@ -22,10 +22,8 @@ public class BorrowVehicleData {
     @NotEmpty(message = "Keperluan tidak boleh kosong")
     private String necessity;
     
-    @NotEmpty(message = "Tanggal pinjam tidak boleh kosong")
     private Date borrowDate;
     
-    @NotEmpty(message = "Tanggal kembali tidak boleh kosong")
     private Date returnDate;
     
     @NotEmpty(message = "Tempat tujuan tidak boleh kosong")
