@@ -1,6 +1,7 @@
 package zero.programmer.data.kendaraan.controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,16 +79,21 @@ public class BorrowVehicleController {
     }
 
     @GetMapping("/borrow-type/{type}")
-    public ResponseEntity<ResponseDataList<BorrowVehicle>>
-    listBorrowVehicleByType(@PathVariable("type") String type) throws
-    NotFoundException{
+    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleByType(@PathVariable("type") String type)
+            throws NotFoundException {
+        ResponseDataList<BorrowVehicle> responseDataList = new ResponseDataList<>();
+        responseDataList.setCode(200);
+        responseDataList.setStatus("OK");
+        responseDataList.setMessages(null);
+        responseDataList.setData(service.listBorrowVehicleByType(type));
+        return ResponseEntity.ok().body(responseDataList);
+    }
 
-    ResponseDataList<BorrowVehicle> responseDataList = new ResponseDataList<>();
-    responseDataList.setCode(200);
-    responseDataList.setStatus("OK");
-    responseDataList.setMessages(null);
-    responseDataList.setData(service.listBorrowVehicleByType(type));
-    return ResponseEntity.ok().body(responseDataList);
+    @DeleteMapping("/{idBorrow}")
+    public ResponseEntity<ResponseData<String>> deleteBorrowVehicle(@PathVariable("idBorrow" )Integer idBorrow) throws NotFoundException{
+        return ResponseEntity.ok().body(
+            new ResponseData<>(200, "OK", Arrays.asList(service.deleteBorrowVehicle(idBorrow)), null)
+        );
     }
 
 }

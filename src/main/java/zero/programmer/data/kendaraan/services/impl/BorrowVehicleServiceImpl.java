@@ -154,5 +154,15 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
         }
         return listByType;
     }
+
+    @Override
+    public String deleteBorrowVehicle(Integer idBorrow) throws NotFoundException {
+        boolean isExist = repository.findById(idBorrow).isPresent();
+        if (!isExist){
+            throw new NotFoundException();
+        }
+        repository.deleteById(idBorrow);
+        return "Data berhasil dihapus";
+    }
     
 }
