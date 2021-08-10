@@ -1,6 +1,7 @@
 package zero.programmer.data.kendaraan.services.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
@@ -40,8 +41,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
 
     @Autowired
     private VehicleService vehicleService;
-
-    private final String INVISIBLE = "invisible";
+    
 
     @Override
     public BorrowVehicle createBorrowVehicle(BorrowVehicleData borrowVehicleData) throws NotFoundException, VehicleIsBorrowException, DriverIsOnDutyException {
@@ -114,8 +114,6 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
             driver.setIsOnDuty(true);
 
             // over write user dengan data di database
-            // set password agar tidak bisa dilihat
-            user.setPassword(INVISIBLE);
             borrowVehicle.setUser(user);
 
             // over write vehicle dengan data di database
@@ -128,6 +126,24 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<BorrowVehicle> listBorrowVehicle() throws NotFoundException {
+        List<BorrowVehicle> listBorrowVehicles = repository.findAll();
+        if (listBorrowVehicles.isEmpty()){
+            throw new NotFoundException();
+        }
+        return listBorrowVehicles;
+    }
+
+    @Override
+    public List<BorrowVehicle> listBorrowVehicleByUsername(String username) throws NotFoundException {
+        List<BorrowVehicle> listByUsername = repository.findByBorrowVehicleUsername(username);
+        if (listByUsername.isEmpty()){
+            throw new NotFoundException();
+        }
+        return listByUsername;
     }
     
 }
