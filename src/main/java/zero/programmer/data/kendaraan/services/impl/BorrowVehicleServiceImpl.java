@@ -80,19 +80,37 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
         // --------- end cek bagian kendaraan ---------
 
         // --------- cek bagian driver ---------
-        Driver driver = driverService.getDriver(borrowVehicle.getDriver().getIdDriver());
-        // cek driver ada atau tidak
-        if (driver == null){
-            allIsValid = false;
-            throw new NotFoundException();
-        }
+        
+        if (borrowVehicle.getDriver() != null){
 
-        // cek driver sedang bertugas atau tidak
-        if (driver.getIsOnDuty()){
-            allIsValid = false;
-            throw new DriverIsOnDutyException();
+            Driver driver = new Driver();
+            driver = driverService.getDriver(borrowVehicle.getDriver().getIdDriver());
+            // cek driver ada atau tidak
+            if (driver == null){
+                allIsValid = false;
+                throw new NotFoundException();
+            }
+
+            // cek driver sedang bertugas atau tidak
+            if (driver.getIsOnDuty()){
+                allIsValid = false;
+                throw new DriverIsOnDutyException();
+            }
+            // --------- end cek bagian driver ---------
+            
+            if (allIsValid){
+                // update driver sedang bertugas
+                Map<Object, Object> updateDriver = new HashMap<>();
+                updateDriver.put("isOnDuty", true);
+                driverService.updatePartialDriver(driver.getIdDriver(), updateDriver);
+                
+                // over write driver is on duty
+                driver.setIsOnDuty(true);
+
+                // over write driver dengan data di database
+                borrowVehicle.setDriver(driver);
+            }
         }
-        // --------- end cek bagian driver ---------
         
         if (allIsValid){
             // update is borrow menjadi true (tanda bahwa kendaraan sedang dipinjam)
@@ -104,23 +122,12 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
             Vehicle vehicle = modelMapper.map(vehicleData, Vehicle.class);
             // over write is borrow menjadi true di data yang akan dikembalikan
             vehicle.setIsBorrow(true);
-
-            // update driver sedang bertugas
-            Map<Object, Object> updateDriver = new HashMap<>();
-            updateDriver.put("isOnDuty", true);
-            driverService.updatePartialDriver(driver.getIdDriver(), updateDriver);
             
-            // over write driver is on duty
-            driver.setIsOnDuty(true);
-
             // over write user dengan data di database
             borrowVehicle.setUser(user);
 
             // over write vehicle dengan data di database
             borrowVehicle.setVehicle(vehicle);
-
-            // over write driver dengan data di database
-            borrowVehicle.setDriver(driver);
 
             return repository.save(borrowVehicle);
         } else {
@@ -144,6 +151,15 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
             throw new NotFoundException();
         }
         return listByUsername;
+    }
+
+    @Override
+    public List<BorrowVehicle> listBorrowVehicleByUsernameNoDriver(String username) throws NotFoundException {
+        List<BorrowVehicle> listByUsernameNoDriver = repository.findByBorrowVehicleUsernameNoDriver(username);
+        if (listByUsernameNoDriver.isEmpty()){
+            throw new NotFoundException();
+        }
+        return listByUsernameNoDriver;
     }
 
     @Override
