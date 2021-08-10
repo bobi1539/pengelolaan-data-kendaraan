@@ -145,5 +145,14 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
         }
         return listByUsername;
     }
+
+    @Override
+    public List<BorrowVehicle> listBorrowVehicleByType(String borrowType) throws NotFoundException {
+        List<BorrowVehicle> listByType = repository.findByBorrowVehicleType(borrowType);
+        if (listByType.isEmpty()){
+            throw new NotFoundException();
+        }
+        return listByType;
+    }
     
 }

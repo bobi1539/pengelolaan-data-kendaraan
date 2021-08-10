@@ -16,4 +16,6 @@ public interface BorrowVehicleService {
 
     public List<BorrowVehicle> listBorrowVehicleByUsername(String username) throws NotFoundException;
 
+    public List<BorrowVehicle> listBorrowVehicleByType(String borrowType) throws NotFoundException;
+
 }

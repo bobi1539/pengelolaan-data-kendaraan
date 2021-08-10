@@ -30,41 +30,31 @@ import zero.programmer.data.kendaraan.models.ResponseDataList;
 @RestController
 @RequestMapping("/api/borrow-vehicle")
 public class BorrowVehicleController {
-    
+
     @Autowired
     private BorrowVehicleService service;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseData<BorrowVehicle>> createBorrowVehicle(@Valid @RequestBody BorrowVehicleData borrowVehicleData, Errors errors) throws NotFoundException, VehicleIsBorrowException, DriverIsOnDutyException{
+    public ResponseEntity<ResponseData<BorrowVehicle>> createBorrowVehicle(
+            @Valid @RequestBody BorrowVehicleData borrowVehicleData, Errors errors)
+            throws NotFoundException, VehicleIsBorrowException, DriverIsOnDutyException {
 
         List<String> messages = new ArrayList<>();
 
-        if (errors.hasErrors()){
-            for (ObjectError error : errors.getAllErrors()){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
                 messages.add(error.getDefaultMessage());
             }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ResponseData<>(
-                    400,
-                    "BAD REQUEST",
-                    messages,
-                    null
-                )
-            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ResponseData<>(400, "BAD REQUEST", messages, null));
         }
 
-        return ResponseEntity.ok().body(
-            new ResponseData<BorrowVehicle>(
-                200,
-                "OK",
-                null,
-                service.createBorrowVehicle(borrowVehicleData)
-            )
-        );
+        return ResponseEntity.ok()
+                .body(new ResponseData<BorrowVehicle>(200, "OK", null, service.createBorrowVehicle(borrowVehicleData)));
     }
 
     @GetMapping()
-    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicle() throws NotFoundException{
+    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicle() throws NotFoundException {
 
         ResponseDataList<BorrowVehicle> responseDataList = new ResponseDataList<>();
         responseDataList.setCode(200);
@@ -74,8 +64,9 @@ public class BorrowVehicleController {
         return ResponseEntity.ok().body(responseDataList);
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleByUsername(@PathVariable("username") String username) throws NotFoundException{
+    @GetMapping("/username/{username}")
+    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleByUsername(
+            @PathVariable("username") String username) throws NotFoundException {
 
         ResponseDataList<BorrowVehicle> responseDataList = new ResponseDataList<>();
         responseDataList.setCode(200);
@@ -83,6 +74,19 @@ public class BorrowVehicleController {
         responseDataList.setMessages(null);
         responseDataList.setData(service.listBorrowVehicleByUsername(username));
         return ResponseEntity.ok().body(responseDataList);
+    }
+
+    @GetMapping("/borrow-type/{type}")
+    public ResponseEntity<ResponseDataList<BorrowVehicle>>
+    listBorrowVehicleByType(@PathVariable("type") String type) throws
+    NotFoundException{
+
+    ResponseDataList<BorrowVehicle> responseDataList = new ResponseDataList<>();
+    responseDataList.setCode(200);
+    responseDataList.setStatus("OK");
+    responseDataList.setMessages(null);
+    responseDataList.setData(service.listBorrowVehicleByType(type));
+    return ResponseEntity.ok().body(responseDataList);
     }
 
 }
