@@ -720,13 +720,33 @@ Response :
     "data": {
         "idBorrow" : "integer (Auto Increment)",
         "user" : {
-            "username" : "string"
+            "username" : "string",
+            "password" : "string",
+            "fullName" : "string",
+            "employeeNumber" : "string",
+            "position" : "string",
+            "workUnit" : "string",
+            "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
         },
         "vehicle" : {
-            "registrationNumber" : "string"
+            "registrationNumber" : "string",
+            "name" : "string",
+            "merk" : "string",
+            "chassisNumber" : "string",
+            "machineNumber" : "string",
+            "policeNumber" : "string",
+            "purchaseDate" : "date",
+            "acquisitionValue" : "long",
+            "location" : "string",
+            "condition" : "string",
+            "isBorrow" : "boolean"
         },
         "driver" : {
-            "idDriver" : "string"
+            "idDriver" : "string",
+            "fullName" : "string",
+            "phoneNumber" : "string",
+            "address" : "string",
+            "isOnDuty" : "boolean"
         },
         "borrowType" : "string",
         "currentDate" : "date",
@@ -735,5 +755,137 @@ Response :
         "returnDate" : "date",
         "destination" : "string"
     }
+}
+```
+
+## Delete Borrow Vehicle
+
+Request : 
+- Method : DELETE
+- Endpoint : '/api/borrow-vehicles/{idBorrow}'
+- Header : 
+    - Accept : application/json
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": null
+}
+```
+
+## List Borrow Vehicle
+
+### All Data
+Request : 
+- Method : GET
+- Endpoint : '/api/borrow-vehicles'
+- Header : 
+    - Accept : application/json
+
+### Filter by username
+Request : 
+- Method : GET
+- Endpoint : '/api/borrow-vehicles/username/{username}'
+- Header : 
+    - Accept : application/json
+
+### Filter by borrow type
+Request : 
+- Method : GET
+- Endpoint : '/api/borrow-vehicles/borrow-type/{type}'
+- Header : 
+    - Accept : application/json
+
+Response : 
+```json
+{
+    "code": "integer",
+    "status": "string",
+    "messages": [
+        "string"
+    ],
+    "data": [
+        {
+            "idBorrow" : "integer (Auto Increment)",
+            "user" : {
+                "username" : "string",
+                "password" : "string",
+                "fullName" : "string",
+                "employeeNumber" : "string",
+                "position" : "string",
+                "workUnit" : "string",
+                "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
+            },
+            "vehicle" : {
+                "registrationNumber" : "string",
+                "name" : "string",
+                "merk" : "string",
+                "chassisNumber" : "string",
+                "machineNumber" : "string",
+                "policeNumber" : "string",
+                "purchaseDate" : "date",
+                "acquisitionValue" : "long",
+                "location" : "string",
+                "condition" : "string",
+                "isBorrow" : "boolean"
+            },
+            "driver" : {
+                "idDriver" : "string",
+                "fullName" : "string",
+                "phoneNumber" : "string",
+                "address" : "string",
+                "isOnDuty" : "boolean"
+            },
+            "borrowType" : "string",
+            "currentDate" : "date",
+            "necessity" : "string",
+            "borrowDate" : "date",
+            "returnDate" : "date",
+            "destination" : "string"
+        },
+        {
+            "idBorrow" : "integer (Auto Increment)",
+            "user" : {
+                "username" : "string",
+                "password" : "string",
+                "fullName" : "string",
+                "employeeNumber" : "string",
+                "position" : "string",
+                "workUnit" : "string",
+                "roleId" : "enum (ADMIN, KARYAWAN, KABID)"
+            },
+            "vehicle" : {
+                "registrationNumber" : "string",
+                "name" : "string",
+                "merk" : "string",
+                "chassisNumber" : "string",
+                "machineNumber" : "string",
+                "policeNumber" : "string",
+                "purchaseDate" : "date",
+                "acquisitionValue" : "long",
+                "location" : "string",
+                "condition" : "string",
+                "isBorrow" : "boolean"
+            },
+            "driver" : {
+                "idDriver" : "string",
+                "fullName" : "string",
+                "phoneNumber" : "string",
+                "address" : "string",
+                "isOnDuty" : "boolean"
+            },
+            "borrowType" : "string",
+            "currentDate" : "date",
+            "necessity" : "string",
+            "borrowDate" : "date",
+            "returnDate" : "date",
+            "destination" : "string"
+        }
+    ]
 }
 ```
