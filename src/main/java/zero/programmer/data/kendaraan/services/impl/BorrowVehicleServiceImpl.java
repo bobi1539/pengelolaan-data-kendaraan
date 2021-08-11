@@ -3,6 +3,7 @@ package zero.programmer.data.kendaraan.services.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,12 +163,25 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
 
     @Override
     public String deleteBorrowVehicle(Integer idBorrow) throws NotFoundException {
-        boolean isExist = repository.findById(idBorrow).isPresent();
-        if (!isExist) {
+        Optional<BorrowVehicle> borrowVehicle = repository.findById(idBorrow);
+        if (!borrowVehicle.isPresent()) {
             throw new NotFoundException();
+        } else {
+
+            try{
+                // ambil data kendaraan
+                VehicleData vehicle = vehicleService.getVehicle(borrowVehicle.get().getVehicle().getRegistrationNumber());
+                // cek jika kendaraan sedang dipinjam tidak bisa di hapus data peminjamannya
+                if (vehicle.getIsBorrow()){
+                    return null;
+                } else {
+                    repository.deleteById(idBorrow);
+                    return "Data berhasil dihapus";
+                }
+            } catch (NullPointerException e){
+                throw new NotFoundException();
+            }
         }
-        repository.deleteById(idBorrow);
-        return "Data berhasil dihapus";
     }
 
     private List<BorrowVehicle> getListBorrowVehicle(List<BorrowVehicle> repository) throws NotFoundException {

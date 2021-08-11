@@ -96,8 +96,14 @@ public class BorrowVehicleController {
 
     @DeleteMapping("/{idBorrow}")
     public ResponseEntity<ResponseData<String>> deleteBorrowVehicle(@PathVariable("idBorrow" )Integer idBorrow) throws NotFoundException{
+        String message = service.deleteBorrowVehicle(idBorrow);
+        if (message == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseData<>(400, "BAD REQUEST", Arrays.asList("Data tidak bisa dihapus karena kendaraan masih belum dikembalikan"), null)
+            );
+        }
         return ResponseEntity.ok().body(
-            new ResponseData<>(200, "OK", Arrays.asList(service.deleteBorrowVehicle(idBorrow)), null)
+            new ResponseData<>(200, "OK", Arrays.asList(message), null)
         );
     }
 
