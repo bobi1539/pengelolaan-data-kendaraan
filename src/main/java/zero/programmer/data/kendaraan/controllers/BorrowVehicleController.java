@@ -66,41 +66,6 @@ public class BorrowVehicleController {
         return ResponseEntity.ok().body(responseDataList);
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleByUsername(
-            @PathVariable("username") String username) throws NotFoundException {
-
-        ResponseDataList<BorrowVehicle> responseDataList = new ResponseDataList<>();
-        responseDataList.setCode(200);
-        responseDataList.setStatus("OK");
-        responseDataList.setMessages(null);
-        responseDataList.setData(service.listBorrowVehicleByUsername(username));
-        return ResponseEntity.ok().body(responseDataList);
-    }
-
-    @GetMapping("/username/no-driver/{username}")
-    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleByUsernameNoDriver(
-            @PathVariable("username") String username) throws NotFoundException {
-
-        ResponseDataList<BorrowVehicle> responseDataList = new ResponseDataList<>();
-        responseDataList.setCode(200);
-        responseDataList.setStatus("OK");
-        responseDataList.setMessages(null);
-        responseDataList.setData(service.listBorrowVehicleByUsernameNoDriver(username));
-        return ResponseEntity.ok().body(responseDataList);
-    }
-
-    @GetMapping("/borrow-type/{type}")
-    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleByType(@PathVariable("type") String type)
-            throws NotFoundException {
-        ResponseDataList<BorrowVehicle> responseDataList = new ResponseDataList<>();
-        responseDataList.setCode(200);
-        responseDataList.setStatus("OK");
-        responseDataList.setMessages(null);
-        responseDataList.setData(service.listBorrowVehicleByType(type));
-        return ResponseEntity.ok().body(responseDataList);
-    }
-
     @GetMapping("/dinas")
     public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleForDinas() throws NotFoundException{
         return ResponseEntity.ok().body(new ResponseDataList<BorrowVehicle>(
@@ -108,10 +73,24 @@ public class BorrowVehicleController {
         ));
     }
 
+    @GetMapping("/dinas/{username}")
+    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleForDinasByUsername(@PathVariable("username") String username) throws NotFoundException{
+        return ResponseEntity.ok().body(new ResponseDataList<BorrowVehicle>(
+            200, "OK", null, service.listBorrowVehicleForDinasByUsername(username)
+        ));
+    }
+
     @GetMapping("/personal")
     public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleForPersonal() throws NotFoundException{
         return ResponseEntity.ok().body(new ResponseDataList<BorrowVehicle>(
             200, "OK", null, service.listBorrowVehicleForPersonal()
+        ));
+    }
+
+    @GetMapping("/personal/{username}")
+    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleForPersonalByUsername(@PathVariable("username") String username) throws NotFoundException{
+        return ResponseEntity.ok().body(new ResponseDataList<BorrowVehicle>(
+            200, "OK", null, service.listBorrowVehicleForPersonalByUsername(username)
         ));
     }
 

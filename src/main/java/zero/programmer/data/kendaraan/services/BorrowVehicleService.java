@@ -14,15 +14,13 @@ public interface BorrowVehicleService {
 
     public List<BorrowVehicle> listBorrowVehicle() throws NotFoundException;
 
-    public List<BorrowVehicle> listBorrowVehicleByUsername(String username) throws NotFoundException;
-
-    public List<BorrowVehicle> listBorrowVehicleByUsernameNoDriver(String username) throws NotFoundException;
-
-    public List<BorrowVehicle> listBorrowVehicleByType(String borrowType) throws NotFoundException;
-
     public List<BorrowVehicle> listBorrowVehicleForDinas() throws NotFoundException;
 
+    public List<BorrowVehicle> listBorrowVehicleForDinasByUsername(String username) throws NotFoundException;
+
     public List<BorrowVehicle> listBorrowVehicleForPersonal() throws NotFoundException;
+
+    public List<BorrowVehicle> listBorrowVehicleForPersonalByUsername(String username) throws NotFoundException;
 
     public String deleteBorrowVehicle(Integer idBorrow) throws NotFoundException;
 

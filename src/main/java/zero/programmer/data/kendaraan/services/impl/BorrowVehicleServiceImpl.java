@@ -137,48 +137,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
 
     @Override
     public List<BorrowVehicle> listBorrowVehicle() throws NotFoundException {
-        List<BorrowVehicle> listBorrowVehicles = repository.findAll();
-        if (listBorrowVehicles.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return listBorrowVehicles;
-    }
-
-    @Override
-    public List<BorrowVehicle> listBorrowVehicleByUsername(String username) throws NotFoundException {
-        List<BorrowVehicle> listByUsername = repository.findByBorrowVehicleUsername(username);
-        if (listByUsername.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return listByUsername;
-    }
-
-    @Override
-    public List<BorrowVehicle> listBorrowVehicleByUsernameNoDriver(String username) throws NotFoundException {
-        List<BorrowVehicle> listByUsernameNoDriver = repository.findByBorrowVehicleUsernameNoDriver(username);
-        if (listByUsernameNoDriver.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return listByUsernameNoDriver;
-    }
-
-    @Override
-    public List<BorrowVehicle> listBorrowVehicleByType(String borrowType) throws NotFoundException {
-        List<BorrowVehicle> listByType = repository.findByBorrowVehicleType(borrowType);
-        if (listByType.isEmpty()) {
-            throw new NotFoundException();
-        }
-        return listByType;
-    }
-
-    @Override
-    public String deleteBorrowVehicle(Integer idBorrow) throws NotFoundException {
-        boolean isExist = repository.findById(idBorrow).isPresent();
-        if (!isExist) {
-            throw new NotFoundException();
-        }
-        repository.deleteById(idBorrow);
-        return "Data berhasil dihapus";
+        return getListBorrowVehicle(repository.findAll());
     }
 
     @Override
@@ -189,6 +148,26 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
     @Override
     public List<BorrowVehicle> listBorrowVehicleForPersonal() throws NotFoundException {
         return getListBorrowVehicle(repository.findBorrowVehicleForPersonal());
+    }
+
+    @Override
+    public List<BorrowVehicle> listBorrowVehicleForDinasByUsername(String username) throws NotFoundException {
+        return getListBorrowVehicle(repository.findBorrowVehicleForDinasByUsername(username));
+    }
+
+    @Override
+    public List<BorrowVehicle> listBorrowVehicleForPersonalByUsername(String username) throws NotFoundException {
+        return getListBorrowVehicle(repository.findBorrowVehicleForPersonalByUsername(username));
+    }
+
+    @Override
+    public String deleteBorrowVehicle(Integer idBorrow) throws NotFoundException {
+        boolean isExist = repository.findById(idBorrow).isPresent();
+        if (!isExist) {
+            throw new NotFoundException();
+        }
+        repository.deleteById(idBorrow);
+        return "Data berhasil dihapus";
     }
 
     private List<BorrowVehicle> getListBorrowVehicle(List<BorrowVehicle> repository) throws NotFoundException {
