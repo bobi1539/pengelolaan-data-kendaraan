@@ -34,8 +34,8 @@ public class BorrowVehicle {
     @Column(name = "borrow_type")
     private String borrowType;
 
-    @Column(name = "current_date_borrow", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date currentDate;
+    @Column(name = "date_of_filling", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Date dateOfFilling;
 
     private String necessity;
 
@@ -51,13 +51,13 @@ public class BorrowVehicle {
     }
 
     public BorrowVehicle(Integer idBorrow, User user, Vehicle vehicle, Driver driver, String borrowType,
-            Date currentDate, String necessity, Date borrowDate, Date returnDate, String destination) {
+            Date dateOfFilling, String necessity, Date borrowDate, Date returnDate, String destination) {
         this.idBorrow = idBorrow;
         this.user = user;
         this.vehicle = vehicle;
         this.driver = driver;
         this.borrowType = borrowType;
-        this.currentDate = currentDate;
+        this.dateOfFilling = dateOfFilling;
         this.necessity = necessity;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
@@ -104,12 +104,12 @@ public class BorrowVehicle {
         this.borrowType = borrowType;
     }
 
-    public Date getCurrentDate() {
-        return currentDate;
+    public Date getdateOfFilling() {
+        return dateOfFilling;
     }
 
-    public void setCurrentDate(Date currentDate) {
-        this.currentDate = currentDate;
+    public void setdateOfFilling(Date dateOfFilling) {
+        this.dateOfFilling = dateOfFilling;
     }
 
     public String getNecessity() {

@@ -749,7 +749,7 @@ Response :
             "isOnDuty" : "boolean"
         },
         "borrowType" : "string",
-        "currentDate" : "date",
+        "dateOfFilling" : "date",
         "necessity" : "string",
         "borrowDate" : "date",
         "returnDate" : "date",
@@ -842,7 +842,7 @@ Response :
                 "isOnDuty" : "boolean"
             },
             "borrowType" : "string",
-            "currentDate" : "date",
+            "dateOfFilling" : "date",
             "necessity" : "string",
             "borrowDate" : "date",
             "returnDate" : "date",
@@ -880,7 +880,7 @@ Response :
                 "isOnDuty" : "boolean"
             },
             "borrowType" : "string",
-            "currentDate" : "date",
+            "dateOfFilling" : "date",
             "necessity" : "string",
             "borrowDate" : "date",
             "returnDate" : "date",
