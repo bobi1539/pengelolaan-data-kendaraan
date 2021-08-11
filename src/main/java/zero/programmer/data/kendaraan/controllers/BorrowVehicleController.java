@@ -101,6 +101,20 @@ public class BorrowVehicleController {
         return ResponseEntity.ok().body(responseDataList);
     }
 
+    @GetMapping("/dinas")
+    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleForDinas() throws NotFoundException{
+        return ResponseEntity.ok().body(new ResponseDataList<BorrowVehicle>(
+            200, "OK", null, service.listBorrowVehicleForDinas()
+        ));
+    }
+
+    @GetMapping("/personal")
+    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleForPersonal() throws NotFoundException{
+        return ResponseEntity.ok().body(new ResponseDataList<BorrowVehicle>(
+            200, "OK", null, service.listBorrowVehicleForPersonal()
+        ));
+    }
+
     @DeleteMapping("/{idBorrow}")
     public ResponseEntity<ResponseData<String>> deleteBorrowVehicle(@PathVariable("idBorrow" )Integer idBorrow) throws NotFoundException{
         return ResponseEntity.ok().body(

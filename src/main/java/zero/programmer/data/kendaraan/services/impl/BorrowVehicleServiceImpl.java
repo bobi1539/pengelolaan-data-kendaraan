@@ -25,7 +25,7 @@ import zero.programmer.data.kendaraan.services.UserService;
 import zero.programmer.data.kendaraan.services.VehicleService;
 
 @Service
-public class BorrowVehicleServiceImpl implements BorrowVehicleService{
+public class BorrowVehicleServiceImpl implements BorrowVehicleService {
 
     @Autowired
     private BorrowVehicleRepository repository;
@@ -41,13 +41,13 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
 
     @Autowired
     private VehicleService vehicleService;
-    
 
     @Override
-    public BorrowVehicle createBorrowVehicle(BorrowVehicleData borrowVehicleData) throws NotFoundException, VehicleIsBorrowException, DriverIsOnDutyException {
+    public BorrowVehicle createBorrowVehicle(BorrowVehicleData borrowVehicleData)
+            throws NotFoundException, VehicleIsBorrowException, DriverIsOnDutyException {
 
         boolean allIsValid = true;
-        
+
         // pindahkan data dari borrowVehicleData ke borrowVehicle
         BorrowVehicle borrowVehicle = modelMapper.map(borrowVehicleData, BorrowVehicle.class);
 
@@ -55,7 +55,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
         User user = userService.getUser(borrowVehicle.getUser().getUsername());
 
         // cek apakah user ada atau tidak
-        if (user == null){
+        if (user == null) {
             allIsValid = false;
             throw new NotFoundException();
         }
@@ -65,45 +65,45 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
         VehicleData vehicleData = new VehicleData();
 
         // cek apakah kendaraan ada atau tidak
-        try{
-            vehicleData  = vehicleService.getVehicle(borrowVehicle.getVehicle().getRegistrationNumber());
-        } catch (NullPointerException e){
+        try {
+            vehicleData = vehicleService.getVehicle(borrowVehicle.getVehicle().getRegistrationNumber());
+        } catch (NullPointerException e) {
             allIsValid = false;
             throw new NotFoundException();
         }
 
         // cek apakah kendaraan dipinjam atau tidak
-        if (vehicleData.getIsBorrow()){
+        if (vehicleData.getIsBorrow()) {
             allIsValid = false;
             throw new VehicleIsBorrowException();
         }
         // --------- end cek bagian kendaraan ---------
 
         // --------- cek bagian driver ---------
-        
-        if (borrowVehicle.getDriver() != null){
+
+        if (borrowVehicle.getDriver() != null) {
 
             Driver driver = new Driver();
             driver = driverService.getDriver(borrowVehicle.getDriver().getIdDriver());
             // cek driver ada atau tidak
-            if (driver == null){
+            if (driver == null) {
                 allIsValid = false;
                 throw new NotFoundException();
             }
 
             // cek driver sedang bertugas atau tidak
-            if (driver.getIsOnDuty()){
+            if (driver.getIsOnDuty()) {
                 allIsValid = false;
                 throw new DriverIsOnDutyException();
             }
             // --------- end cek bagian driver ---------
-            
-            if (allIsValid){
+
+            if (allIsValid) {
                 // update driver sedang bertugas
                 Map<Object, Object> updateDriver = new HashMap<>();
                 updateDriver.put("isOnDuty", true);
                 driverService.updatePartialDriver(driver.getIdDriver(), updateDriver);
-                
+
                 // over write driver is on duty
                 driver.setIsOnDuty(true);
 
@@ -111,8 +111,8 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
                 borrowVehicle.setDriver(driver);
             }
         }
-        
-        if (allIsValid){
+
+        if (allIsValid) {
             // update is borrow menjadi true (tanda bahwa kendaraan sedang dipinjam)
             Map<Object, Object> updateVehicle = new HashMap<>();
             updateVehicle.put("isBorrow", true);
@@ -122,7 +122,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
             Vehicle vehicle = modelMapper.map(vehicleData, Vehicle.class);
             // over write is borrow menjadi true di data yang akan dikembalikan
             vehicle.setIsBorrow(true);
-            
+
             // over write user dengan data di database
             borrowVehicle.setUser(user);
 
@@ -138,7 +138,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
     @Override
     public List<BorrowVehicle> listBorrowVehicle() throws NotFoundException {
         List<BorrowVehicle> listBorrowVehicles = repository.findAll();
-        if (listBorrowVehicles.isEmpty()){
+        if (listBorrowVehicles.isEmpty()) {
             throw new NotFoundException();
         }
         return listBorrowVehicles;
@@ -147,7 +147,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
     @Override
     public List<BorrowVehicle> listBorrowVehicleByUsername(String username) throws NotFoundException {
         List<BorrowVehicle> listByUsername = repository.findByBorrowVehicleUsername(username);
-        if (listByUsername.isEmpty()){
+        if (listByUsername.isEmpty()) {
             throw new NotFoundException();
         }
         return listByUsername;
@@ -156,7 +156,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
     @Override
     public List<BorrowVehicle> listBorrowVehicleByUsernameNoDriver(String username) throws NotFoundException {
         List<BorrowVehicle> listByUsernameNoDriver = repository.findByBorrowVehicleUsernameNoDriver(username);
-        if (listByUsernameNoDriver.isEmpty()){
+        if (listByUsernameNoDriver.isEmpty()) {
             throw new NotFoundException();
         }
         return listByUsernameNoDriver;
@@ -165,7 +165,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
     @Override
     public List<BorrowVehicle> listBorrowVehicleByType(String borrowType) throws NotFoundException {
         List<BorrowVehicle> listByType = repository.findByBorrowVehicleType(borrowType);
-        if (listByType.isEmpty()){
+        if (listByType.isEmpty()) {
             throw new NotFoundException();
         }
         return listByType;
@@ -174,11 +174,28 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService{
     @Override
     public String deleteBorrowVehicle(Integer idBorrow) throws NotFoundException {
         boolean isExist = repository.findById(idBorrow).isPresent();
-        if (!isExist){
+        if (!isExist) {
             throw new NotFoundException();
         }
         repository.deleteById(idBorrow);
         return "Data berhasil dihapus";
     }
-    
+
+    @Override
+    public List<BorrowVehicle> listBorrowVehicleForDinas() throws NotFoundException {
+        return getListBorrowVehicle(repository.findBorrowVehicleForDinas());
+    }
+
+    @Override
+    public List<BorrowVehicle> listBorrowVehicleForPersonal() throws NotFoundException {
+        return getListBorrowVehicle(repository.findBorrowVehicleForPersonal());
+    }
+
+    private List<BorrowVehicle> getListBorrowVehicle(List<BorrowVehicle> repository) throws NotFoundException {
+        if (repository.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return repository;
+    }
+
 }

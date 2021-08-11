@@ -20,6 +20,10 @@ public interface BorrowVehicleService {
 
     public List<BorrowVehicle> listBorrowVehicleByType(String borrowType) throws NotFoundException;
 
+    public List<BorrowVehicle> listBorrowVehicleForDinas() throws NotFoundException;
+
+    public List<BorrowVehicle> listBorrowVehicleForPersonal() throws NotFoundException;
+
     public String deleteBorrowVehicle(Integer idBorrow) throws NotFoundException;
 
 }

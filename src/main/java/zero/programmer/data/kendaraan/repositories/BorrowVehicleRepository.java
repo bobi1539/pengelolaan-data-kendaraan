@@ -20,4 +20,10 @@ public interface BorrowVehicleRepository extends JpaRepository<BorrowVehicle, In
     @Query(value = "SELECT * FROM borrow_vehicle JOIN users   ON users.username = borrow_vehicle.username JOIN vehicles   ON vehicles.registration_number = borrow_vehicle.registration_number JOIN drivers   ON drivers.id_driver = borrow_vehicle.id_driver WHERE borrow_vehicle.borrow_type = :borrowType", nativeQuery = true)
     public List<BorrowVehicle> findByBorrowVehicleType(@PathParam("borrowType") String borrowType);
 
+    @Query(value = "SELECT * FROM borrow_vehicle JOIN users   ON users.username = borrow_vehicle.username JOIN vehicles   ON vehicles.registration_number = borrow_vehicle.registration_number JOIN drivers   ON drivers.id_driver = borrow_vehicle.id_driver WHERE borrow_vehicle.borrow_type = 'DINAS'", nativeQuery = true)
+    public List<BorrowVehicle> findBorrowVehicleForDinas();
+
+    @Query(value = "SELECT * FROM borrow_vehicle JOIN users ON users.username = borrow_vehicle.username JOIN vehicles ON vehicles.registration_number = borrow_vehicle.registration_number WHERE borrow_vehicle.borrow_type = 'PRIBADI'", nativeQuery = true)
+    public List<BorrowVehicle> findBorrowVehicleForPersonal();
+
 }

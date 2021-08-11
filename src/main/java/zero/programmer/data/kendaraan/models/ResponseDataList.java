@@ -13,6 +13,16 @@ public class ResponseDataList<T> {
 
     private List<T> data;
 
+    public ResponseDataList() {
+    }
+
+    public ResponseDataList(Integer code, String status, List<String> messages, List<T> data) {
+        this.code = code;
+        this.status = status;
+        this.messages = messages;
+        this.data = data;
+    }
+
     public Integer getCode() {
         return code;
     }
