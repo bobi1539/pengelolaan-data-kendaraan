@@ -52,7 +52,7 @@ public class BorrowVehicleController {
         }
 
         return ResponseEntity.ok()
-                .body(new ResponseData<BorrowVehicle>(200, "OK", null, service.createBorrowVehicle(borrowVehicleData)));
+                .body(new ResponseData<BorrowVehicle>(200, "OK", Arrays.asList("Data berhasil ditambahkan"), service.createBorrowVehicle(borrowVehicleData)));
     }
 
     @GetMapping()
