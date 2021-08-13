@@ -170,19 +170,12 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
         if (!borrowVehicle.isPresent()) {
             throw new NotFoundException();
         } else {
-
-            try{
-                // ambil data kendaraan
-                VehicleData vehicle = vehicleService.getVehicle(borrowVehicle.get().getVehicle().getRegistrationNumber());
-                // cek jika kendaraan sedang dipinjam tidak bisa di hapus data peminjamannya
-                if (vehicle.getIsBorrow()){
-                    return null;
-                } else {
-                    repository.deleteById(idBorrow);
-                    return "Data berhasil dihapus";
-                }
-            } catch (NullPointerException e){
-                throw new NotFoundException();
+            // cek jika status sedang dipinjam tidak bisa di hapus data peminjamannya
+            if (borrowVehicle.get().getBorrowStatus()){
+                return null;
+            } else {
+                repository.deleteById(idBorrow);
+                return "Data berhasil dihapus";
             }
         }
     }
