@@ -94,6 +94,13 @@ public class BorrowVehicleController {
         ));
     }
 
+    @GetMapping("/{idBorrow}")
+    public ResponseEntity<ResponseData<BorrowVehicle>> getVehicle(@PathVariable("idBorrow") Integer idBorrow) throws NotFoundException{
+        return ResponseEntity.ok().body(
+            new ResponseData<BorrowVehicle>(200, "OK", null, service.getBorrowVehicle(idBorrow))
+        );
+    }
+
     @DeleteMapping("/{idBorrow}")
     public ResponseEntity<ResponseData<String>> deleteBorrowVehicle(@PathVariable("idBorrow" )Integer idBorrow) throws NotFoundException{
         String message = service.deleteBorrowVehicle(idBorrow);

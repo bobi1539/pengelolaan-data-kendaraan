@@ -191,4 +191,13 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
         return repository;
     }
 
+    @Override
+    public BorrowVehicle getBorrowVehicle(Integer idBorrow) throws NotFoundException {
+        Optional<BorrowVehicle> borrowVehicle = repository.findById(idBorrow);
+        if (!borrowVehicle.isPresent()){
+            throw new NotFoundException();
+        }
+        return borrowVehicle.get();
+    }
+
 }
