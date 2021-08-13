@@ -28,8 +28,7 @@ Request :
 	"purchaseDate" : "date",
 	"acquisitionValue" : "long",
 	"location" : "string",
-	"condition" : "string",
-	"isBorrow" : "boolean"
+	"condition" : "string"
 }
 ```
 

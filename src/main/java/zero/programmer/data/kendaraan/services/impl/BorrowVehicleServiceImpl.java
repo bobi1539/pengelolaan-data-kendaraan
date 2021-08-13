@@ -130,6 +130,9 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
             // over write vehicle dengan data di database
             borrowVehicle.setVehicle(vehicle);
 
+            // membuat agar borrow status false 
+            borrowVehicle.setBorrowStatus(false);
+
             return repository.save(borrowVehicle);
         } else {
             return null;
