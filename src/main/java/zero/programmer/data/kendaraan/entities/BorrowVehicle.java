@@ -47,11 +47,15 @@ public class BorrowVehicle {
     
     private String destination;
 
+    @Column(name = "borrow_status")
+    private Boolean borrowStatus;
+
     public BorrowVehicle() {
     }
 
     public BorrowVehicle(Integer idBorrow, User user, Vehicle vehicle, Driver driver, String borrowType,
-            Date dateOfFilling, String necessity, Date borrowDate, Date returnDate, String destination) {
+            Date dateOfFilling, String necessity, Date borrowDate, Date returnDate, String destination,
+            Boolean borrowStatus) {
         this.idBorrow = idBorrow;
         this.user = user;
         this.vehicle = vehicle;
@@ -62,6 +66,7 @@ public class BorrowVehicle {
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
         this.destination = destination;
+        this.borrowStatus = borrowStatus;
     }
 
     public Integer getIdBorrow() {
@@ -144,7 +149,12 @@ public class BorrowVehicle {
         this.destination = destination;
     }
 
-    
-    
+    public Boolean getBorrowStatus() {
+        return borrowStatus;
+    }
+
+    public void setBorrowStatus(Boolean borrowStatus) {
+        this.borrowStatus = borrowStatus;
+    }
 
 }

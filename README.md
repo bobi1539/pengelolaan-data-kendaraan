@@ -705,7 +705,8 @@ Request :
 	"necessity" : "string",
 	"borrowDate" : "date",
 	"returnDate" : "date",
-	"destination" : "string"
+	"destination" : "string",
+	"borrowStatus" : "boolean"
 }
 ```
 
@@ -753,7 +754,8 @@ Response :
         "necessity" : "string",
         "borrowDate" : "date",
         "returnDate" : "date",
-        "destination" : "string"
+        "destination" : "string",
+        "borrowStatus" : "boolean"
     }
 }
 ```
@@ -787,17 +789,17 @@ Request :
 - Header : 
     - Accept : application/json
 
-### Filter by username
+### Filter by borrow type dinas
 Request : 
 - Method : GET
-- Endpoint : '/api/borrow-vehicles/username/{username}'
+- Endpoint : '/api/borrow-vehicles/dinas'
 - Header : 
     - Accept : application/json
 
-### Filter by borrow type
+### Filter by borrow type personal
 Request : 
 - Method : GET
-- Endpoint : '/api/borrow-vehicles/borrow-type/{type}'
+- Endpoint : '/api/borrow-vehicles/personal'
 - Header : 
     - Accept : application/json
 
@@ -846,7 +848,8 @@ Response :
             "necessity" : "string",
             "borrowDate" : "date",
             "returnDate" : "date",
-            "destination" : "string"
+            "destination" : "string",
+            "borrowStatus" : "boolean"
         },
         {
             "idBorrow" : "integer (Auto Increment)",
@@ -884,7 +887,8 @@ Response :
             "necessity" : "string",
             "borrowDate" : "date",
             "returnDate" : "date",
-            "destination" : "string"
+            "destination" : "string",
+            "borrowStatus" : "boolean"
         }
     ]
 }

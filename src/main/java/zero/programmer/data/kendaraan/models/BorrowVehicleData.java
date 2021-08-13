@@ -9,31 +9,33 @@ import zero.programmer.data.kendaraan.entities.Vehicle;
 import zero.programmer.data.kendaraan.entities.Driver;
 
 public class BorrowVehicleData {
-    
+
     private User user;
 
     private Vehicle vehicle;
-    
+
     private Driver driver;
-    
+
     @NotEmpty(message = "Jenis peminjaman tidak boleh kosong")
     private String borrowType;
 
     @NotEmpty(message = "Keperluan tidak boleh kosong")
     private String necessity;
-    
+
     private Date borrowDate;
-    
+
     private Date returnDate;
-    
+
     @NotEmpty(message = "Tempat tujuan tidak boleh kosong")
     private String destination;
+
+    private Boolean borrowStatus;
 
     public BorrowVehicleData() {
     }
 
     public BorrowVehicleData(User user, Vehicle vehicle, Driver driver, String borrowType, String necessity,
-            Date borrowDate, Date returnDate, String destination) {
+            Date borrowDate, Date returnDate, String destination, Boolean borrowStatus) {
         this.user = user;
         this.vehicle = vehicle;
         this.driver = driver;
@@ -42,6 +44,7 @@ public class BorrowVehicleData {
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
         this.destination = destination;
+        this.borrowStatus = borrowStatus;
     }
 
     public User getUser() {
@@ -108,6 +111,11 @@ public class BorrowVehicleData {
         this.destination = destination;
     }
 
+    public Boolean getBorrowStatus() {
+        return borrowStatus;
+    }
 
-
+    public void setBorrowStatus(Boolean borrowStatus) {
+        this.borrowStatus = borrowStatus;
+    }
 }
