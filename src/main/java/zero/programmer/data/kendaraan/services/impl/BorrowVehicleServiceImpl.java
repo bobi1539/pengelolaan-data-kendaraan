@@ -1,5 +1,7 @@
 package zero.programmer.data.kendaraan.services.impl;
 
+import java.lang.reflect.Field;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import zero.programmer.data.kendaraan.entities.BorrowVehicle;
 import zero.programmer.data.kendaraan.entities.User;
@@ -18,6 +21,7 @@ import zero.programmer.data.kendaraan.error.NotFoundException;
 import zero.programmer.data.kendaraan.error.NullPointerException;
 import zero.programmer.data.kendaraan.error.VehicleIsBorrowException;
 import zero.programmer.data.kendaraan.models.BorrowVehicleData;
+import zero.programmer.data.kendaraan.models.UpdateRequestBorrowVehicle;
 import zero.programmer.data.kendaraan.models.VehicleData;
 import zero.programmer.data.kendaraan.repositories.BorrowVehicleRepository;
 import zero.programmer.data.kendaraan.services.BorrowVehicleService;
@@ -194,6 +198,72 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
             throw new NotFoundException();
         }
         return borrowVehicle.get();
+    }
+
+    @Override
+    public BorrowVehicle updatePartial(Integer idBorrow, Map<Object, Object> fields) throws NotFoundException {
+        
+        // find data from database
+        Optional<BorrowVehicle> borrowVehicle = repository.findById(idBorrow);
+
+        // cek jika data tidak ada di db
+        if (!borrowVehicle.isPresent()){
+            throw new NotFoundException();
+        } else {
+
+            // set data to request update borrow vehicle agar bisa direfleksikan yang tipe data date
+            UpdateRequestBorrowVehicle requestBorrow = new UpdateRequestBorrowVehicle(
+                borrowVehicle.get().getNecessity(),
+                String.valueOf(borrowVehicle.get().getBorrowDate()),
+                String.valueOf(borrowVehicle.get().getReturnDate()),
+                borrowVehicle.get().getDestination(),
+                borrowVehicle.get().getBorrowStatus()
+            );
+
+            fields.forEach((key, value) -> {
+                Field field = ReflectionUtils.findField(UpdateRequestBorrowVehicle.class, (String) key);
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, requestBorrow, value);
+            });
+
+            // update status vehicle menjadi ready / false
+            Map<Object, Object> updateVehicle = new HashMap<>();
+            updateVehicle.put("isBorrow", requestBorrow.getBorrowStatus());
+            vehicleService.updatePartial(
+                borrowVehicle.get().getVehicle().getRegistrationNumber(), updateVehicle
+            );
+            // over write status vehicle
+            borrowVehicle.get().getVehicle().setIsBorrow(requestBorrow.getBorrowStatus());
+
+            // cek jika driver tidak null
+            if (borrowVehicle.get().getDriver() != null){
+                // update status driver menjadi ready / false
+                Map<Object, Object> updateDriver = new HashMap<>();
+                updateDriver.put("isOnDuty", requestBorrow.getBorrowStatus());
+                driverService.updatePartialDriver(
+                    borrowVehicle.get().getDriver().getIdDriver(), updateDriver
+                );
+                // over write status driver
+                borrowVehicle.get().getDriver().setIsOnDuty(requestBorrow.getBorrowStatus());
+            }
+
+            // set data baru dari requestBorrow
+            borrowVehicle.get().setNecessity(requestBorrow.getNecessity());
+            System.out.println("tanggal " + requestBorrow.getBorrowDate());
+
+            // cek apakah tanggal pinjam berubah
+            if (!borrowVehicle.get().getBorrowDate().toString().equals(requestBorrow.getBorrowDate())){
+                borrowVehicle.get().setBorrowDate(Date.valueOf(requestBorrow.getBorrowDate()));
+            }
+            // cek apakah tanggal kembali berubah
+            if (!borrowVehicle.get().getReturnDate().toString().equals(requestBorrow.getReturnDate())){
+                borrowVehicle.get().setReturnDate(Date.valueOf(requestBorrow.getReturnDate()));
+            }
+
+            borrowVehicle.get().setDestination(requestBorrow.getDestination());
+            borrowVehicle.get().setBorrowStatus(requestBorrow.getBorrowStatus());
+            return repository.save(borrowVehicle.get());
+        }
     }
 
 }

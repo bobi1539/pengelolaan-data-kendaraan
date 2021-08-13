@@ -3,6 +3,7 @@ package zero.programmer.data.kendaraan.controllers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -14,6 +15,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -111,6 +113,18 @@ public class BorrowVehicleController {
         }
         return ResponseEntity.ok().body(
             new ResponseData<>(200, "OK", Arrays.asList(message), null)
+        );
+    }
+
+    @PatchMapping("/{idBorrow}")
+    public ResponseEntity<ResponseData<BorrowVehicle>> updatePartial(@PathVariable("idBorrow") Integer idBorrow, @RequestBody Map<Object, Object> fields) throws NotFoundException{
+        return ResponseEntity.ok().body(
+            new ResponseData<BorrowVehicle>(
+                200,
+                "OK",
+                Arrays.asList("Data berhasil di update"),
+                service.updatePartial(idBorrow, fields)
+            )
         );
     }
 

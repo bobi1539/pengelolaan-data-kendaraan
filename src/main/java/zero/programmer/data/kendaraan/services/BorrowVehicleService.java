@@ -1,6 +1,7 @@
 package zero.programmer.data.kendaraan.services;
 
 import java.util.List;
+import java.util.Map;
 
 import zero.programmer.data.kendaraan.entities.BorrowVehicle;
 import zero.programmer.data.kendaraan.error.DriverIsOnDutyException;
@@ -25,5 +26,7 @@ public interface BorrowVehicleService {
     public BorrowVehicle getBorrowVehicle(Integer idBorrow) throws NotFoundException;
 
     public String deleteBorrowVehicle(Integer idBorrow) throws NotFoundException;
+
+    public BorrowVehicle updatePartial(Integer idBorrow, Map<Object, Object> fields) throws NotFoundException;
 
 }
