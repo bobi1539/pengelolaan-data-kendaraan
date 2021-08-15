@@ -266,4 +266,13 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
         }
     }
 
+    @Override
+    public List<BorrowVehicle> listBorrowVehicleForDinasByDateOfFilling(String dateOfFilling) throws NotFoundException {
+        List<BorrowVehicle> listBorrow = repository.findBorrowVehicleForDinasLike("%" + dateOfFilling + "%");
+        if (listBorrow.isEmpty()){
+            throw new NotFoundException();
+        }
+        return listBorrow;
+    }
+
 }

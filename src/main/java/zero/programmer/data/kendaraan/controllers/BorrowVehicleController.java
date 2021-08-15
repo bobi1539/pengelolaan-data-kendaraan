@@ -103,6 +103,13 @@ public class BorrowVehicleController {
         );
     }
 
+    @GetMapping("/dinas/date/{dateOfFilling}")
+    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehicleDinasLike(@PathVariable("dateOfFilling") String dateOfFilling) throws NotFoundException{
+        return ResponseEntity.ok().body(new ResponseDataList<BorrowVehicle>(
+            200, "OK", null, service.listBorrowVehicleForDinasByDateOfFilling(dateOfFilling)
+        ));
+    }
+
     @DeleteMapping("/{idBorrow}")
     public ResponseEntity<ResponseData<String>> deleteBorrowVehicle(@PathVariable("idBorrow" )Integer idBorrow) throws NotFoundException{
         String message = service.deleteBorrowVehicle(idBorrow);

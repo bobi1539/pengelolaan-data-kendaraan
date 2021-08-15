@@ -23,6 +23,8 @@ public interface BorrowVehicleService {
 
     public List<BorrowVehicle> listBorrowVehicleForPersonalByUsername(String username) throws NotFoundException;
 
+    public List<BorrowVehicle> listBorrowVehicleForDinasByDateOfFilling(String dateOfFilling) throws NotFoundException;
+
     public BorrowVehicle getBorrowVehicle(Integer idBorrow) throws NotFoundException;
 
     public String deleteBorrowVehicle(Integer idBorrow) throws NotFoundException;
