@@ -134,7 +134,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
             // over write vehicle dengan data di database
             borrowVehicle.setVehicle(vehicle);
 
-            // membuat agar borrow status true 
+            // membuat agar borrow status true
             borrowVehicle.setBorrowStatus(true);
 
             return repository.save(borrowVehicle);
@@ -175,7 +175,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
             throw new NotFoundException();
         } else {
             // cek jika status sedang dipinjam tidak bisa di hapus data peminjamannya
-            if (borrowVehicle.get().getBorrowStatus()){
+            if (borrowVehicle.get().getBorrowStatus()) {
                 return null;
             } else {
                 repository.deleteById(idBorrow);
@@ -194,7 +194,7 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
     @Override
     public BorrowVehicle getBorrowVehicle(Integer idBorrow) throws NotFoundException {
         Optional<BorrowVehicle> borrowVehicle = repository.findById(idBorrow);
-        if (!borrowVehicle.isPresent()){
+        if (!borrowVehicle.isPresent()) {
             throw new NotFoundException();
         }
         return borrowVehicle.get();
@@ -202,23 +202,21 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
 
     @Override
     public BorrowVehicle updatePartial(Integer idBorrow, Map<Object, Object> fields) throws NotFoundException {
-        
+
         // find data from database
         Optional<BorrowVehicle> borrowVehicle = repository.findById(idBorrow);
 
         // cek jika data tidak ada di db
-        if (!borrowVehicle.isPresent()){
+        if (!borrowVehicle.isPresent()) {
             throw new NotFoundException();
         } else {
 
-            // set data to request update borrow vehicle agar bisa direfleksikan yang tipe data date
+            // set data to request update borrow vehicle agar bisa direfleksikan yang tipe
+            // data date
             UpdateRequestBorrowVehicle requestBorrow = new UpdateRequestBorrowVehicle(
-                borrowVehicle.get().getNecessity(),
-                String.valueOf(borrowVehicle.get().getBorrowDate()),
-                String.valueOf(borrowVehicle.get().getReturnDate()),
-                borrowVehicle.get().getDestination(),
-                borrowVehicle.get().getBorrowStatus()
-            );
+                    borrowVehicle.get().getNecessity(), String.valueOf(borrowVehicle.get().getBorrowDate()),
+                    String.valueOf(borrowVehicle.get().getReturnDate()), borrowVehicle.get().getDestination(),
+                    borrowVehicle.get().getBorrowStatus());
 
             fields.forEach((key, value) -> {
                 Field field = ReflectionUtils.findField(UpdateRequestBorrowVehicle.class, (String) key);
@@ -229,20 +227,16 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
             // update status vehicle menjadi ready / false
             Map<Object, Object> updateVehicle = new HashMap<>();
             updateVehicle.put("isBorrow", requestBorrow.getBorrowStatus());
-            vehicleService.updatePartial(
-                borrowVehicle.get().getVehicle().getRegistrationNumber(), updateVehicle
-            );
+            vehicleService.updatePartial(borrowVehicle.get().getVehicle().getRegistrationNumber(), updateVehicle);
             // over write status vehicle
             borrowVehicle.get().getVehicle().setIsBorrow(requestBorrow.getBorrowStatus());
 
             // cek jika driver tidak null
-            if (borrowVehicle.get().getDriver() != null){
+            if (borrowVehicle.get().getDriver() != null) {
                 // update status driver menjadi ready / false
                 Map<Object, Object> updateDriver = new HashMap<>();
                 updateDriver.put("isOnDuty", requestBorrow.getBorrowStatus());
-                driverService.updatePartialDriver(
-                    borrowVehicle.get().getDriver().getIdDriver(), updateDriver
-                );
+                driverService.updatePartialDriver(borrowVehicle.get().getDriver().getIdDriver(), updateDriver);
                 // over write status driver
                 borrowVehicle.get().getDriver().setIsOnDuty(requestBorrow.getBorrowStatus());
             }
@@ -252,11 +246,11 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
             System.out.println("tanggal " + requestBorrow.getBorrowDate());
 
             // cek apakah tanggal pinjam berubah
-            if (!borrowVehicle.get().getBorrowDate().toString().equals(requestBorrow.getBorrowDate())){
+            if (!borrowVehicle.get().getBorrowDate().toString().equals(requestBorrow.getBorrowDate())) {
                 borrowVehicle.get().setBorrowDate(Date.valueOf(requestBorrow.getBorrowDate()));
             }
             // cek apakah tanggal kembali berubah
-            if (!borrowVehicle.get().getReturnDate().toString().equals(requestBorrow.getReturnDate())){
+            if (!borrowVehicle.get().getReturnDate().toString().equals(requestBorrow.getReturnDate())) {
                 borrowVehicle.get().setReturnDate(Date.valueOf(requestBorrow.getReturnDate()));
             }
 
@@ -269,7 +263,17 @@ public class BorrowVehicleServiceImpl implements BorrowVehicleService {
     @Override
     public List<BorrowVehicle> listBorrowVehicleForDinasByDateOfFilling(String dateOfFilling) throws NotFoundException {
         List<BorrowVehicle> listBorrow = repository.findBorrowVehicleForDinasLike("%" + dateOfFilling + "%");
-        if (listBorrow.isEmpty()){
+        if (listBorrow.isEmpty()) {
+            throw new NotFoundException();
+        }
+        return listBorrow;
+    }
+
+    @Override
+    public List<BorrowVehicle> listBorrowVehicleForPersonalByDateOfFilling(String dateOfFilling)
+            throws NotFoundException {
+        List<BorrowVehicle> listBorrow = repository.findBorrowVehicleForPersonalLike("%" + dateOfFilling + "%");
+        if (listBorrow.isEmpty()) {
             throw new NotFoundException();
         }
         return listBorrow;

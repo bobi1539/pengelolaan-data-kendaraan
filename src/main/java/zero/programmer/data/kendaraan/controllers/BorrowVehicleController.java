@@ -110,6 +110,13 @@ public class BorrowVehicleController {
         ));
     }
 
+    @GetMapping("/personal/date/{dateOfFilling}")
+    public ResponseEntity<ResponseDataList<BorrowVehicle>> listBorrowVehiclePersonalLike(@PathVariable("dateOfFilling") String dateOfFilling) throws NotFoundException{
+        return ResponseEntity.ok().body(new ResponseDataList<BorrowVehicle>(
+            200, "OK", null, service.listBorrowVehicleForPersonalByDateOfFilling(dateOfFilling)
+        ));
+    }
+
     @DeleteMapping("/{idBorrow}")
     public ResponseEntity<ResponseData<String>> deleteBorrowVehicle(@PathVariable("idBorrow" )Integer idBorrow) throws NotFoundException{
         String message = service.deleteBorrowVehicle(idBorrow);
